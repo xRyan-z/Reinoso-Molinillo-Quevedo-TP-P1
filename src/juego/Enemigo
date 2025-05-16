@@ -33,7 +33,7 @@ package juego;
 	        }
 	    }
 
-	    // Dibujar el murciélago (rectángulo temporal)
+	    // Dibujar el murciélago (imagen)
 	    public void dibujar(Entorno entorno) {
 	    	entorno.dibujarImagen(imagen, x, y, 0);
 	    }
