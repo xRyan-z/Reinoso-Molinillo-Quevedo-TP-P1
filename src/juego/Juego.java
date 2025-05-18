@@ -14,6 +14,7 @@ public class Juego extends InterfaceJuego
 	private Entorno entorno;
 	private Gondolf Gondolf;
 	private Image fondo;
+	private Piedra[] piedras = new Piedra [4];
 	
 	private Enemigo[] enemigos = new Enemigo[50];
 	private int enemigosVivos = 0;
@@ -38,6 +39,10 @@ public class Juego extends InterfaceJuego
 		// Inicia el juego!
 		this.entorno.iniciar();
 		this.Gondolf = new Gondolf(300, 300, 25, 10, java.awt.Color.RED);
+		this.piedras[0] = new Piedra (200, 300, 50,50, Color.green);
+		this.piedras[1] = new Piedra (300, 100, 50,50, Color.green);
+		this.piedras[2] = new Piedra (500, 300, 50,50, Color.green);
+		this.piedras[3] = new Piedra (250, 500, 50,50, Color.green);
 		
 		int panelWidth = entorno.ancho();  // 800
 		int menuAncho = 150;
@@ -72,18 +77,18 @@ public class Juego extends InterfaceJuego
 	{ 		//System.out.println(">> tick() frame");
 		// Procesamiento de un instante de tiempo
 		// ...
-		if(entorno.estaPresionada(entorno.TECLA_DERECHA) &&  !Gondolf.colisionaPorDerecha(entorno)) {
-			Gondolf.MoverIzq();
-			}
-		if(entorno.estaPresionada(entorno.TECLA_IZQUIERDA) && !Gondolf.colisionaPorIzquierda(entorno)) {
-			Gondolf.MoverDer();
-			}
-		if(entorno.estaPresionada(entorno.TECLA_ARRIBA)&& !Gondolf.colisionaPorArriba(entorno)) {
-			Gondolf.MoverArriba();
-			}
-		if(entorno.estaPresionada(entorno.TECLA_ABAJO)&& !Gondolf.colisionaPorAbajo(entorno)) {
-			Gondolf.MoverAbajo();
-			}
+		if (entorno.estaPresionada('a') && !Gondolf.colisionaPorIzquierda(entorno) && !colisionaConPiedra(-5, 0)) {
+		    Gondolf.MoverIzq();
+		}
+		if (entorno.estaPresionada('d') && !Gondolf.colisionaPorDerecha(entorno) && !colisionaConPiedra(5, 0)) {
+		    Gondolf.MoverDer();
+		}
+		if (entorno.estaPresionada('w') && !Gondolf.colisionaPorArriba(entorno) && !colisionaConPiedra(0, -5)) {
+		    Gondolf.MoverArriba();
+		}
+		if (entorno.estaPresionada('s') && !Gondolf.colisionaPorAbajo(entorno) && !colisionaConPiedra(0, 5)) {
+		    Gondolf.MoverAbajo();
+		}
 		
 		if (enemigosVivos < 10 && totalCreados < 50) {
 			if (enemigosVivos < 10 && totalCreados < 50) {
@@ -153,6 +158,11 @@ public class Juego extends InterfaceJuego
 	
 	public void dibujarObjetos() {
 		Gondolf.dibujar(entorno);
+		for (int i = 0; i < piedras.length; i++) {
+			if (piedras[i] != null) {
+				piedras[i].dibujar(entorno);
+			}
+		}
         for (Enemigo e : enemigos) {
             if (e != null) e.dibujar(entorno);
 		  }
@@ -172,6 +182,22 @@ public class Juego extends InterfaceJuego
 
 	    return new Enemigo(x, y, 20, 20);
 	}
+	
+	public boolean colisionaConPiedra(int dx, int dy) {
+	    for (Piedra p : piedras) {
+	        // Calculamos dónde estaría Gondolf si se moviera
+	        int futuroX = Gondolf.getX() + dx;
+	        int futuroY = Gondolf.getY() + dy;
+
+	        // Verificamos si en esa posición estaría tocando una piedra
+	        if (Math.abs(futuroX - p.getX()) < (Gondolf.getAncho() / 2 + p.getAncho() / 2) &&
+	            Math.abs(futuroY - p.getY()) < (Gondolf.getAlto() / 2 + p.getAlto() / 2)) {
+	            return true; // Hay colisión
+	        }
+	    }
+	    return false; // No hay colisión
+	}
+
 	
 	@SuppressWarnings("unused")
 	public static void main(String[] args)
