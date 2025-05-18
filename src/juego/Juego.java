@@ -1,6 +1,10 @@
 package juego;
+
+import java.awt.Color;
 import java.awt.Image;
+
 import javax.swing.ImageIcon;
+
 import entorno.Entorno;
 import entorno.InterfaceJuego;
 
@@ -10,9 +14,15 @@ public class Juego extends InterfaceJuego
 	private Entorno entorno;
 	private Gondolf Gondolf;
 	private Image fondo;
+	
 	private Enemigo[] enemigos = new Enemigo[50];
 	private int enemigosVivos = 0;
 	private int totalCreados = 0;
+	
+	private Menu tituloHechizos;
+    private Boton botonBombaAgua;
+    private Boton botonTormentaFuego;
+    private Boton botonSeleccionado;
 	
 	// Variables y métodos propios de cada grupo
 	// ...
@@ -29,6 +39,26 @@ public class Juego extends InterfaceJuego
 		this.entorno.iniciar();
 		this.Gondolf = new Gondolf(300, 300, 25, 10, java.awt.Color.RED);
 		
+		int panelWidth = entorno.ancho();  // 800
+		int menuAncho = 150;
+		int menuAlto = 90;
+		int margenDerecho = 10;
+		int posX = panelWidth - menuAncho / 2 - margenDerecho;
+	
+		int tituloAlto = 40;
+		int posY_Titulo = 50;
+		int posY_BombaAgua = 190;  
+		int posY_TormentaFuego = 290;
+		
+		botonBombaAgua = new Boton(posX, posY_BombaAgua, menuAncho, menuAlto, Color.black);
+        botonBombaAgua.setTexto("BOMBA DE AGUA");
+
+        botonTormentaFuego = new Boton(posX, posY_TormentaFuego, menuAncho, menuAlto, Color.black);
+        botonTormentaFuego.setTexto("TORMENTA DE FUEGO");
+
+        tituloHechizos = new Menu(posX, posY_Titulo, tituloAlto, menuAncho, Color.red);
+        tituloHechizos.setTexto("HECHIZOS");
+        tituloHechizos.setFuente("Impact", 20, Color.WHITE);
 	}
 
 	/**
@@ -80,12 +110,46 @@ public class Juego extends InterfaceJuego
                 }		
             }
           }
+     // Detectar click sobre botones de hechizo
+        if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
+            int mx = entorno.mouseX();
+            int my = entorno.mouseY();
+
+            if (botonBombaAgua.estaDentro(mx, my)) {
+                seleccionarBoton(botonBombaAgua);
+            } else if (botonTormentaFuego.estaDentro(mx, my)) {
+                seleccionarBoton(botonTormentaFuego);
+            }
+        }
+
         entorno.dibujarImagen(fondo, entorno.ancho() / 2, entorno.alto() / 2, 0);
-		
-        dibujarObjetos();
+
+        this.dibujarObjetos();
         
-	} 
-	
+        tituloHechizos.dibujar(entorno);
+        botonBombaAgua.dibujar(entorno);
+        botonTormentaFuego.dibujar(entorno);
+    }
+
+    private void seleccionarBoton(Boton b) {
+        if (botonSeleccionado != null) {
+            botonSeleccionado.setSeleccionado(false);
+        }
+        botonSeleccionado = b;
+        botonSeleccionado.setSeleccionado(true);
+    }
+    
+ // Método para lanzar hechizo que limpia la selección
+    public void lanzarHechizo() {
+        if (botonSeleccionado != null) {
+            // lógica para lanzar el hechizo según botonSeleccionado
+            // ...
+
+            // Luego deseleccionamos el botón
+            botonSeleccionado.setSeleccionado(false);
+            botonSeleccionado = null;
+        }
+    }
 	
 	public void dibujarObjetos() {
 		Gondolf.dibujar(entorno);
