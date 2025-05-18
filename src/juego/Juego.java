@@ -38,11 +38,11 @@ public class Juego extends InterfaceJuego
 
 		// Inicia el juego!
 		this.entorno.iniciar();
-		this.Gondolf = new Gondolf(300, 300, 25, 10, java.awt.Color.RED);
-		this.piedras[0] = new Piedra (200, 300, 50,50, Color.green);
-		this.piedras[1] = new Piedra (300, 100, 50,50, Color.green);
-		this.piedras[2] = new Piedra (500, 300, 50,50, Color.green);
-		this.piedras[3] = new Piedra (250, 500, 50,50, Color.green);
+		this.Gondolf = new Gondolf(300, 300, 50, 20, 100, 100, java.awt.Color.RED);
+		this.piedras[0] = new Piedra (200, 300, 50,50, "Imagenes/piedra.png");
+		this.piedras[1] = new Piedra (300, 100, 50,50, "Imagenes/piedra.png");
+		this.piedras[2] = new Piedra (500, 300, 50,50, "Imagenes/piedra.png");
+		this.piedras[3] = new Piedra (250, 500, 50,50, "Imagenes/piedra.png");
 		
 		int panelWidth = entorno.ancho();  // 800
 		int menuAncho = 150;
@@ -77,6 +77,8 @@ public class Juego extends InterfaceJuego
 	{ 		//System.out.println(">> tick() frame");
 		// Procesamiento de un instante de tiempo
 		// ...
+			
+		
 		if (entorno.estaPresionada('a') && !Gondolf.colisionaPorIzquierda(entorno) && !colisionaConPiedra(-5, 0)) {
 		    Gondolf.MoverIzq();
 		}

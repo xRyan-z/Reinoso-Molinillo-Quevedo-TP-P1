@@ -1,6 +1,8 @@
 package juego;
 
-import java.awt.Color;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 
 import entorno.Entorno;
 
@@ -9,20 +11,21 @@ public class Piedra {
     private int y;
     private int ancho;
     private int alto;
-    private Color color;
+    private Image imagen;
 
-    public Piedra(int x,int y,int ancho, int alto, Color color) {
+    public Piedra(int x,int y,int ancho, int alto, String imagen) {
     this.x = x;
     this.y = y;
     this.ancho = ancho;
     this.alto = alto;
-    this.color = color;
+    this.imagen = new ImageIcon("Imagenes/piedra.png").getImage();
 
 }
-    public void dibujar (Entorno entorno) {
-        entorno.dibujarRectangulo(x, y, ancho, alto, 0, color);
+    public void dibujar(Entorno entorno) {
+		entorno.dibujarImagen(imagen, x, y,0,1); // 1 = escala (100%)
+	}
 
-}
+
     public int getX() {
         return x;
     }

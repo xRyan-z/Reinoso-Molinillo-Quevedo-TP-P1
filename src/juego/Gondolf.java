@@ -14,12 +14,14 @@ public class Gondolf {
     private int mana;
 
 
-    public Gondolf (int x , int y, int alto, int ancho, Color color) {
+    public Gondolf (int x , int y, int alto, int ancho, int vida, int mana, Color color) {
         this.x = x;
         this.y = y;
         this.alto = alto;
         this.ancho = ancho;
         this.color = color; 
+        this.vida = vida;
+        this.mana = mana;
 
     }
 
