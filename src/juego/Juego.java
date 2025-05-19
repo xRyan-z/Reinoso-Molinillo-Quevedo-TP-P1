@@ -21,6 +21,8 @@ public class Juego extends InterfaceJuego
 	private int totalCreados = 0;
 	
 	private Menu tituloHechizos;
+	private Menu pvida;
+	private Menu pmana;
     private Boton botonBombaAgua;
     private Boton botonTormentaFuego;
     private Boton botonSeleccionado;
@@ -61,9 +63,15 @@ public class Juego extends InterfaceJuego
         botonTormentaFuego = new Boton(posX, posY_TormentaFuego, menuAncho, menuAlto, Color.black);
         botonTormentaFuego.setTexto("TORMENTA DE FUEGO");
 
-        tituloHechizos = new Menu(posX, posY_Titulo, tituloAlto, menuAncho, Color.red);
+        tituloHechizos = new Menu(posX, posY_Titulo, tituloAlto, menuAncho, Color.black);
         tituloHechizos.setTexto("HECHIZOS");
         tituloHechizos.setFuente("Impact", 20, Color.WHITE);
+        
+        pvida = new Menu(posX, posY_Titulo + 400, tituloAlto , menuAncho, Color.red); 
+        pvida.setFuente("Impact", 20, Color.BLACK);
+        
+        pmana = new Menu(posX, posY_Titulo + 450, tituloAlto , menuAncho, Color.blue);
+        pmana.setFuente("Impact", 20, Color.BLACK);
 	}
 
 	/**
@@ -112,6 +120,7 @@ public class Juego extends InterfaceJuego
                   e.moverHacia(Gondolf.getX(), Gondolf.getY());
                   if (e.colisionaCon(Gondolf.getX(), Gondolf.getY(), 20)) {
                       enemigos[i] = null;
+                      Gondolf.restarvida();
                       enemigosVivos--;
                    //Gondolf.restarVida(10); // método que vos deberías tener en Gondolf
                 }		
@@ -136,6 +145,10 @@ public class Juego extends InterfaceJuego
         tituloHechizos.dibujar(entorno);
         botonBombaAgua.dibujar(entorno);
         botonTormentaFuego.dibujar(entorno);
+        pvida.setTexto("Vida: " + Gondolf.mostrarvida()+"%"); // Muestra la vida del personaje
+        pmana.setTexto("Mana: " + Gondolf.mostrarmana()+"%"); //Muestra la vida del personaje
+        pvida.dibujar(entorno);
+        pmana.dibujar(entorno);
     }
 
     private void seleccionarBoton(Boton b) {

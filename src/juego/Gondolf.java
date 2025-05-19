@@ -12,6 +12,7 @@ public class Gondolf {
     private Color color;
     private int vida;
     private int mana;
+    private String mana2;
 
 
     public Gondolf (int x , int y, int alto, int ancho, int vida, int mana, Color color) {
@@ -27,10 +28,57 @@ public class Gondolf {
 
         public void dibujar (Entorno entorno) {
         entorno.dibujarRectangulo(x, y, ancho, alto, 0, color);
-
-
+        
+        }
+           		
+        
+        public int restarvida() {
+        	if(vida > 0) {
+        	vida = vida - 10;
+        	} else {
+        	}
+        		
+        return vida;
 
     }
+        public int sumarvida() {
+        	if(vida > 0 && vida <= 100) {
+        	vida = vida + 10;
+        	
+        	} else {
+        		 System.out.println(vida);
+        	}
+        return vida;
+    }
+        public String mostrarvida() {
+            String vidamostrada = Integer.toString(vida);
+            return vidamostrada;
+            }     
+        
+        public int restarmana() {
+        	if(mana > 0) {
+        	mana = mana - 10;
+        	System.out.println(mana);
+        	} else {
+        	}
+        return mana;
+
+    }
+        public int sumarmana() {
+        	if(mana >= 0 && mana <= 100) {
+        	mana = mana + 10;
+        	System.out.println(mana);
+        	} else {
+        		 System.out.println(mana);
+        	}
+        return mana;
+    }
+        public String mostrarmana() {
+            String manamostrada = Integer.toString(mana);
+            return manamostrada;
+            }  
+        
+        
 
     public void MoverIzq() {
         this.x -=5 ;
@@ -82,12 +130,6 @@ public class Gondolf {
     public int getAncho() {
         return ancho;
     }
-
-    public void setAncho(int ancho) {
-        this.ancho = ancho;
-    }
-
-
 
 
 
