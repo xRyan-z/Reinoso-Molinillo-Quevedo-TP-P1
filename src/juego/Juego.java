@@ -32,7 +32,7 @@ public class Juego extends InterfaceJuego
 	
 	Juego() {
 		this.fondo = new ImageIcon("Imagenes/Pisodetierra.png").getImage();
-		// Inicializa el objeto entorno
+		// Idnicializa el objeto entorno
 		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
 		
 		// Inicializar lo que haga falta para el juego
@@ -40,7 +40,7 @@ public class Juego extends InterfaceJuego
 
 		// Inicia el juego!
 		this.entorno.iniciar();
-		this.Gondolf = new Gondolf(300, 300, 50, 20, 100, 100, java.awt.Color.RED);
+		this.Gondolf = new Gondolf(300, 300, 50, 50, 100, 100);
 		this.piedras[0] = new Piedra (200, 300, 50,50, "Imagenes/piedra.png");
 		this.piedras[1] = new Piedra (300, 100, 50,50, "Imagenes/piedra.png");
 		this.piedras[2] = new Piedra (500, 300, 50,50, "Imagenes/piedra.png");

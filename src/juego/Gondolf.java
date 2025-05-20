@@ -1,7 +1,7 @@
 package juego;
 
-import java.awt.Color;
-
+import java.awt.Image;
+import java.awt.Toolkit;
 import entorno.Entorno;
 
 public class Gondolf {
@@ -9,27 +9,35 @@ public class Gondolf {
     private int y;
     private int alto;
     private int ancho;
-    private Color color;
     private int vida;
     private int mana;
-    private String mana2;
+    private Image imagenDerecha;
+    private Image imagenIzquierda;
+    private Image imagenActual;
+    private Image imagenArriba;
+    private Image imagenAbajo;
+    
 
-
-    public Gondolf (int x , int y, int alto, int ancho, int vida, int mana, Color color) {
+    public Gondolf (int x , int y, int alto, int ancho, int vida, int mana) {
         this.x = x;
         this.y = y;
         this.alto = alto;
         this.ancho = ancho;
-        this.color = color; 
         this.vida = vida;
         this.mana = mana;
+        this.imagenDerecha = Toolkit.getDefaultToolkit().getImage("Imagenes/Gondolfder.png");
+        this.imagenIzquierda = Toolkit.getDefaultToolkit().getImage("Imagenes/Gondolfizq.png");
+        this.imagenAbajo = Toolkit.getDefaultToolkit().getImage("Imagenes/GondolfNormaloAbajo.png");
+        this.imagenArriba = Toolkit.getDefaultToolkit().getImage("Imagenes/Gondolfarriba.png");
+
+        // Imagen inicial por defecto
+        this.imagenActual = imagenAbajo;
 
     }
 
-        public void dibujar (Entorno entorno) {
-        entorno.dibujarRectangulo(x, y, ancho, alto, 0, color);
-        
-        }
+    public void dibujar(Entorno entorno) {
+        entorno.dibujarImagen(imagenActual, x, y, 0, 1.0);
+    }
            		
         
         public int restarvida() {
@@ -81,16 +89,20 @@ public class Gondolf {
         
 
     public void MoverIzq() {
-        this.x -=5 ;
+        this.x -=3 ;
+        this.imagenActual = imagenIzquierda;
     }
     public void MoverDer() {
-        this.x +=5 ;
+        this.x +=3 ;
+        this.imagenActual = imagenDerecha;
     }
     public void MoverArriba() {
-        this.y -=5 ;
+        this.y -=3 ;
+        this.imagenActual = imagenArriba;
     }
     public void MoverAbajo() {
-        this.y +=5 ;
+        this.y +=3 ;
+        this.imagenActual = imagenAbajo;
     }
 
     public boolean colisionaPorDerecha(Entorno entorno) {
