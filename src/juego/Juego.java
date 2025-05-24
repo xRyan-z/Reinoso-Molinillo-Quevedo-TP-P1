@@ -15,8 +15,10 @@ public class Juego extends InterfaceJuego
 	private Gondolf Gondolf;
 	private Image fondo;
 	private Piedra[] piedras = new Piedra [4];
+	private boolean juegoTerminado = false;
+	private Pocion[] pociones= new Pocion [20];
 	
-	private Enemigo[] enemigos = new Enemigo[50];
+	private Enemigo[] enemigos = new Enemigo[10];
 	private int enemigosVivos = 0;
 	private int totalCreados = 0;
 	
@@ -80,13 +82,38 @@ public class Juego extends InterfaceJuego
 	 * actualizar el estado interno del juego para simular el paso del tiempo 
 	 * (ver el enunciado del TP para mayor detalle).
 	 */
-	
+	private void reiniciarJuego() {
+	    Gondolf = new Gondolf(300, 300, 50, 50, 100, 100);
+	    enemigos = new Enemigo[10];
+	    enemigosVivos = 0;
+	    totalCreados = 0;
+	    juegoTerminado = false;
+	    for (int i = 0; i < pociones.length; i++) { // Limpiar todas las pociones anteriores
+	        pociones[i] = null;
+	    }
+	}
 	public void tick()
 	{ 		//System.out.println(">> tick() frame");
 		// Procesamiento de un instante de tiempo
 		// ...
-			
-		
+		     
+		 //  Una vez que la vida del mago llega a 0, se muestra en pantalla: (reinicia ENTER).
+	    if (juegoTerminado) {
+	    	Image imagenFondo = new ImageIcon("Imagenes/go.png").getImage();
+	    	entorno.dibujarImagen(imagenFondo, entorno.ancho() / 2, entorno.alto() / 2, 0);
+	        if (entorno.estaPresionada(entorno.TECLA_ENTER)) {
+	            reiniciarJuego();
+	        }
+
+	        return;
+	    }
+
+	    // Chequeo real de vida para activar game over
+	    if (Gondolf.getVida() <= 0) {
+	        juegoTerminado = true;
+	        return; // cancelo el resto del tick
+	    }
+	    
 		if (entorno.estaPresionada('a') && !Gondolf.colisionaPorIzquierda(entorno) && !colisionaConPiedra(-5, 0)) {
 		    Gondolf.MoverIzq();
 		}
@@ -99,33 +126,59 @@ public class Juego extends InterfaceJuego
 		if (entorno.estaPresionada('s') && !Gondolf.colisionaPorAbajo(entorno) && !colisionaConPiedra(0, 5)) {
 		    Gondolf.MoverAbajo();
 		}
+	
 		
 		if (enemigosVivos < 10 && totalCreados < 50) {
-			if (enemigosVivos < 10 && totalCreados < 50) {
 			    for (int i = 0; i < enemigos.length; i++) {
 			        if (enemigos[i] == null) {
 			            enemigos[i] = generarMurcielagoAleatorio();
 			            enemigosVivos++;
 			            totalCreados++;
-			            break; // muy importante: salimos del for después de generar uno
+			            break; // salimos del for después de generar uno
 			        }
 			    }
-			}
-		   //System.out.println("  + creado murcielago #" + totalCreados);
 		}
 		 // Mover, dibujar y colisionar murciélagos
         for (int i = 0; i < enemigos.length; i++) {
         	  Enemigo e = enemigos[i];
               if (e != null) {
                   e.moverHacia(Gondolf.getX(), Gondolf.getY());
+                  
                   if (e.colisionaCon(Gondolf.getX(), Gondolf.getY(), 20)) {
                       enemigos[i] = null;
-                      Gondolf.restarvida();
                       enemigosVivos--;
-                   //Gondolf.restarVida(10); // método que vos deberías tener en Gondolf
-                }		
+                      Gondolf.restarvida();
+                      
+                      if (Gondolf.getVida() <= 0) {
+                          juegoTerminado = true;
+                          return;
+                      }
+                   // Murcielagos=null y vida del mago <=30, se deposita mediante el murcielago una pocion.
+                      	if (Gondolf.getVida() <= 30) {
+                    	  for(int j=0; j<pociones.length; j++) {
+                    		  if (pociones[j]==null){
+                    			  pociones[j]= new Pocion (e.getX(), e.getY());
+                    			  break;
+                    		}
+                          }
+                       }
+                    }
+                  }   
+               }
+
+        			for (int i = 0; i < pociones.length; i++) {
+        				if (pociones[i] != null) {
+        					// Dibujar la poción
+        					pociones[i].dibujar(entorno);
+
+        					// Si ya pasaron 6 segundos, eliminarla
+        					if (pociones[i].expirada()) {
+        						pociones[i] = null;
+                }
             }
-          }
+        }
+        
+        
      // Detectar click sobre botones de hechizo
         if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
             int mx = entorno.mouseX();
@@ -137,7 +190,7 @@ public class Juego extends InterfaceJuego
                 seleccionarBoton(botonTormentaFuego);
             }
         }
-
+        
         entorno.dibujarImagen(fondo, entorno.ancho() / 2, entorno.alto() / 2, 0);
 
         this.dibujarObjetos();
@@ -149,7 +202,16 @@ public class Juego extends InterfaceJuego
         pmana.setTexto("Mana: " + Gondolf.mostrarmana()+"%"); //Muestra la vida del personaje
         pvida.dibujar(entorno);
         pmana.dibujar(entorno);
-    }
+        
+        for (int i = 0; i < pociones.length; i++) {
+            Pocion p = pociones[i];
+            if (p != null && p.colisionaCon(Gondolf.getX(), Gondolf.getY(), 20)) {
+                Gondolf.sumarvida(); 
+                pociones[i] = null;  // Quita la poción del suelo
+            }
+        }
+	}
+    
 
     private void seleccionarBoton(Boton b) {
         if (botonSeleccionado != null) {
@@ -181,6 +243,12 @@ public class Juego extends InterfaceJuego
         for (Enemigo e : enemigos) {
             if (e != null) e.dibujar(entorno);
 		  }
+        for (int i=0; i< pociones.length; i++) {
+        	if (pociones[i]!= null) {
+        		pociones[i].dibujar(entorno);
+        	}
+        }
+        
 	}
 	
 	private Enemigo generarMurcielagoAleatorio() {
@@ -212,7 +280,8 @@ public class Juego extends InterfaceJuego
 	    }
 	    return false; // No hay colisión
 	}
-
+	
+	
 	
 	@SuppressWarnings("unused")
 	public static void main(String[] args)
