@@ -39,7 +39,7 @@ public class Gondolf {
         entorno.dibujarImagen(imagenActual, x, y, 0, 1.0);
     }
            		
-        
+    	
         public int restarvida() {
         	if(vida > 0) {
         	vida = vida - 10;
@@ -50,7 +50,7 @@ public class Gondolf {
 
     }
         public int sumarvida() {
-        	if(vida > 0 && vida <= 100) {
+        	if(vida > 0 && vida < 100) {
         	vida = vida + 10;
         	
         	} else {
@@ -143,6 +143,13 @@ public class Gondolf {
         return ancho;
     }
 
+    public int getVida() {
+        return this.vida;
+    }
 
+	public void sumarVida() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

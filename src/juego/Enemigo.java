@@ -5,15 +5,12 @@ import javax.swing.ImageIcon;
 	public class Enemigo {
 	    private int x;
 	    private int y;
-	    private int ancho;
-	    private int alto;
+	    
 	    private Image imagenes;
 
 	    public Enemigo(int x, int y, int ancho, int alto) {
 	        this.x = x;
 	        this.y = y;
-	        this.ancho = ancho;
-	        this.alto = alto;
 	        this.imagenes = new ImageIcon("Imagenes/mmurcielago.gif").getImage();
 	        
 	    }
@@ -30,7 +27,7 @@ import javax.swing.ImageIcon;
 	        }
 	    }
 
-	    // Dibujar el murciélago (rectángulo temporal)
+	    // Dibujar el murciélago 
 	    public void dibujar(Entorno entorno) {
 	    	entorno.dibujarImagen(imagenes, x, y, 0);
 	    }
