@@ -25,6 +25,7 @@ public class Juego extends InterfaceJuego
 	private Menu tituloHechizos;
 	private Menu pvida;
 	private Menu pmana;
+	private Menu CDEnemigosEliminados;
     private Boton botonBombaAgua;
     private Boton botonTormentaFuego;
     private Boton botonSeleccionado;
@@ -34,6 +35,11 @@ public class Juego extends InterfaceJuego
     private Hechizos circuloFuego;
     private Image imagenFuego;
     private Image imagenAgua;
+    private Jefe Jefe;
+    private boolean jefeGenerado = false;
+    private Disparo[] disparo = new Disparo[500];
+    private int contadorDisparoJefe = 0;
+    private int EnemigosEliminados;
 	
 	// Variables y métodos propios de cada grupo
 	// ...
@@ -53,6 +59,8 @@ public class Juego extends InterfaceJuego
 		this.piedras[1] = new Piedra (300, 100, 50,50, "Imagenes/piedra.png");
 		this.piedras[2] = new Piedra (500, 300, 50,50, "Imagenes/piedra.png");
 		this.piedras[3] = new Piedra (250, 500, 50,50, "Imagenes/piedra.png");
+		this.Jefe = new Jefe(320,0,70,70, Color.blue);
+		this.EnemigosEliminados = 0;
 		
 		int panelWidth = entorno.ancho();  // 800
 		int menuAncho = 150;
@@ -88,6 +96,9 @@ public class Juego extends InterfaceJuego
         
         this.imagenFuego = new ImageIcon("Imagenes/tormentaDeFuego.gif").getImage();
         this.imagenAgua = new ImageIcon("Imagenes/bombaDeAgua.gif").getImage();
+        
+        CDEnemigosEliminados = new Menu(posX, posY_Titulo + 500, tituloAlto , menuAncho, Color.GRAY); 
+        CDEnemigosEliminados.setFuente("Impact", 13, Color.BLACK);
 	}
 
 	/**
@@ -122,6 +133,8 @@ public class Juego extends InterfaceJuego
 	        return;
 	    }
 
+	    entorno.escribirTexto("La cantidad de Enemigos eliminados son: "+ EnemigosEliminados, 700, 500);
+	    
 	    // Chequeo real de vida para activar game over
 	    if (Gondolf.getVida() <= 0) {
 	        juegoTerminado = true;
@@ -162,6 +175,7 @@ public class Juego extends InterfaceJuego
                   if (hechizoActivo && entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
                       if (circuloAgua != null && circuloAgua.colisionaCon(e)) {
                           enemigos[i] = null;
+                          EnemigosEliminados++;
                           enemigosVivos--;
                       }
                   }
@@ -169,6 +183,7 @@ public class Juego extends InterfaceJuego
                   if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
                 	  if (hechizoFuegoActivo && circuloFuego != null && circuloFuego.colisionaCon(e)) {
                           enemigos[i] = null;
+                          EnemigosEliminados++;
                           enemigosVivos--;
                           Gondolf.restarMana(); // baja el mana al impactar
                       }
@@ -195,6 +210,12 @@ public class Juego extends InterfaceJuego
                     }
                   }   
                }
+        
+        if (totalCreados == 50 && enemigosVivos == 0 && !jefeGenerado) {
+			jefeGenerado = true;
+			// Genera al jefe
+		}
+        
      // Desactivar hechizos (solo una vez, fuera del for)
         if (hechizoActivo && entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
             hechizoActivo = false;
@@ -267,8 +288,10 @@ public class Juego extends InterfaceJuego
         botonTormentaFuego.dibujar(entorno);
         pvida.setTexto("Vida: " + Gondolf.mostrarvida()+"%"); // Muestra la vida del personaje
         pmana.setTexto("Mana: " + Gondolf.mostrarmana()+"%"); //Muestra la vida del personaje
+        CDEnemigosEliminados.setTexto("     Enemigos Eliminados: " + EnemigosEliminados);
         pvida.dibujar(entorno);
         pmana.dibujar(entorno);
+        CDEnemigosEliminados.dibujar(entorno);
         
         for (int i = 0; i < pociones.length; i++) {
             Pocion p = pociones[i];
@@ -298,13 +321,51 @@ public class Juego extends InterfaceJuego
         for (Enemigo e : enemigos) {
             if (e != null) e.dibujar(entorno);
 		  }
+        if (jefeGenerado && Jefe != null) {
+        	Jefe.dibujar(entorno);
+        	Jefe.mover(entorno);
+        	
+        	contadorDisparoJefe++;
+        	
+        	 if (jefeGenerado && Jefe != null) {
+                 // Crear un nuevo disparo si hay espacio libre
+                 for (int i = 0; i < disparo.length; i++) {
+                     if (disparo[i] == null && contadorDisparoJefe % 50 == 0){
+                         disparo[i] = new Disparo(Jefe.getX(), Jefe.getY() + Jefe.getAlto() / 2, 15, 15);
+                         System.out.println("Disparo creado en: " + Jefe.getX() + "," + (Jefe.getY() + Jefe.getAlto() / 2));
+                         break; // solo crea un disparo por tick
+                     }
+                 }
+                 for (int j = 0; j < disparo.length; j++) {
+                     if (disparo[j] != null) {
+                         disparo[j].dibujar(entorno);
+                         disparo[j].mover();
+                         if(disparo[j].ColisionaCon(Gondolf.getX(), Gondolf.getY(), 20)) {
+                        	 disparo[j] = null;
+                        	 Gondolf.restarvida();
+                        	 break;
+                         }    
+                         
+                         if (disparo[j].getY() > entorno.alto()) {
+                             disparo[j] = null;
+                         }        
+                         
+                 
+     
         for (int i=0; i< pociones.length; i++) {
         	if (pociones[i]!= null) {
         		pociones[i].dibujar(entorno);
         	}
         }
-        
+        	 }
+        }
+        	 }
+        	 }
 	}
+	
+	
+	
+	
 	
 	private Enemigo generarMurcielagoAleatorio() {
 	    int lado = (int)(Math.random() * 4); // 0=arriba, 1=derecha, 2=abajo, 3=izquierda
