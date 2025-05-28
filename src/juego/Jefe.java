@@ -12,6 +12,7 @@ public class Jefe {
     private int alto;
     private int direccioninicial;
     private Image imagen;
+    private int vida;
     
     
     public Jefe(int x, int y, int ancho, int alto, Color color) {
@@ -21,6 +22,7 @@ public class Jefe {
     	this.alto = alto;
     	this.direccioninicial = 1;
     	this.imagen = new ImageIcon("Imagenes/golbat.gif").getImage();
+    	this.vida = 100;
     	
     	
     }
@@ -53,6 +55,19 @@ public class Jefe {
         return this.x - this.ancho/2 <= 0;
     }
 
+    public int restarvida(int a) {
+    	if(vida > 0) {
+    	vida = vida - a;
+    	}
+    		
+    return vida;
+
+}
+    public String mostrarvida() {
+        String vidamostrada = Integer.toString(vida);
+        return vidamostrada;
+        }     
+    
     
 	public int getX() {
 		return x;
@@ -68,6 +83,14 @@ public class Jefe {
 
 	public int getAlto() {
 		return alto;
+	}
+
+	public int getVida() {
+		return vida;
+	}
+
+	public void setVida(int vida) {
+		this.vida = vida;
 	}
 
     

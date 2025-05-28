@@ -26,6 +26,13 @@ public class Hechizos {
         double distancia = Math.sqrt(dx * dx + dy * dy);
         return distancia < this.diametro / 2 + 20; // 20 es un radio aproximado del murciélago
     }
+    
+    public boolean colisionaCon(Jefe jefe) {
+        double dx = this.x - jefe.getX();
+        double dy = this.y - jefe.getY();
+        double distancia = Math.sqrt(dx * dx + dy * dy);
+        return distancia < this.diametro / 2 + 20; // 20 es un radio aproximado del murciélago
+    }
 
     public double getX() {
         return x;
