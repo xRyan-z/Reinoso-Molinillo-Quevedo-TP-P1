@@ -14,6 +14,8 @@ public class Menu {
 	private String fuente;
     private int tamañoFuente;
     private Color colorTexto;
+    private static final Color brown = new Color(90, 45, 15);
+    private static final Color light_brown = new Color (205, 133, 63);
 	
 	public Menu (int x , int y, int alto, int ancho, Color color) {
 		this.x = x;
@@ -22,7 +24,7 @@ public class Menu {
 		this.ancho = ancho;
 		this.color = color; 
 		this.texto = "";
-		this.fuente = "Impact"; 
+		this.fuente = "Showcard Gothic"; 
         this.tamañoFuente = 17; 
         this.colorTexto = Color.WHITE;
     
@@ -36,6 +38,12 @@ public class Menu {
         this.fuente = fuente;
         this.tamañoFuente = tamaño;
         this.colorTexto = colorTexto;
+    }
+	public static Color getBrown() {
+        return brown;
+    }
+	public static Color getlight_brown() {
+        return light_brown;
     }
 	
     public void dibujar(Entorno entorno) {

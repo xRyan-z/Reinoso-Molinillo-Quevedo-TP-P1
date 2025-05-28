@@ -68,4 +68,12 @@ public class Boton {
 
         return (px >= left && px <= right && py >= top && py <= bottom);
     }
+    
+    public int getX() {
+        return this.x;
+    }
+
+    public int getY() {
+        return this.y;
+    }
 }

@@ -63,7 +63,7 @@ public class Gondolf {
             return vidamostrada;
             }     
         
-        public int restarmana() {
+        public int restarMana() {
         	if(mana > 0) {
         	mana = mana - 10;
         	System.out.println(mana);
@@ -72,7 +72,7 @@ public class Gondolf {
         return mana;
 
     }
-        public int sumarmana() {
+        public int sumarMana() {
         	if(mana >= 0 && mana <= 100) {
         	mana = mana + 10;
         	System.out.println(mana);
@@ -150,6 +150,9 @@ public class Gondolf {
 	public void sumarVida() {
 		// TODO Auto-generated method stub
 		
+	}
+	public int getMana() {
+	    return mana;
 	}
 
 }

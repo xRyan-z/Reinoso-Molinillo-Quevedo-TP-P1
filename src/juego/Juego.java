@@ -28,6 +28,12 @@ public class Juego extends InterfaceJuego
     private Boton botonBombaAgua;
     private Boton botonTormentaFuego;
     private Boton botonSeleccionado;
+    private Hechizos circuloAgua;
+    boolean hechizoActivo = false;
+    boolean hechizoFuegoActivo = false;
+    private Hechizos circuloFuego;
+    private Image imagenFuego;
+    private Image imagenAgua;
 	
 	// Variables y métodos propios de cada grupo
 	// ...
@@ -61,19 +67,27 @@ public class Juego extends InterfaceJuego
 		
 		botonBombaAgua = new Boton(posX, posY_BombaAgua, menuAncho, menuAlto, Color.black);
         botonBombaAgua.setTexto("BOMBA DE AGUA");
+        botonBombaAgua.setFuente("impact", 17, Menu.getlight_brown());
 
         botonTormentaFuego = new Boton(posX, posY_TormentaFuego, menuAncho, menuAlto, Color.black);
         botonTormentaFuego.setTexto("TORMENTA DE FUEGO");
+        botonTormentaFuego.setFuente("impact", 17, Menu.getlight_brown());
 
-        tituloHechizos = new Menu(posX, posY_Titulo, tituloAlto, menuAncho, Color.black);
+        tituloHechizos = new Menu(posX, posY_Titulo, tituloAlto, menuAncho, Menu.getBrown());
         tituloHechizos.setTexto("HECHIZOS");
-        tituloHechizos.setFuente("Impact", 20, Color.WHITE);
+        tituloHechizos.setFuente("impact", 22, Color.WHITE);
         
         pvida = new Menu(posX, posY_Titulo + 400, tituloAlto , menuAncho, Color.red); 
         pvida.setFuente("Impact", 20, Color.BLACK);
         
         pmana = new Menu(posX, posY_Titulo + 450, tituloAlto , menuAncho, Color.blue);
         pmana.setFuente("Impact", 20, Color.BLACK);
+        
+        circuloAgua = new Hechizos(100, 100, 200, 200, 40, Color.green);
+        circuloFuego = new Hechizos(300, 300, 600, 600, 80, Color.blue);
+        
+        this.imagenFuego = new ImageIcon("Imagenes/tormentaDeFuego.gif").getImage();
+        this.imagenAgua = new ImageIcon("Imagenes/bombaDeAgua.gif").getImage();
 	}
 
 	/**
@@ -126,7 +140,7 @@ public class Juego extends InterfaceJuego
 		if (entorno.estaPresionada('s') && !Gondolf.colisionaPorAbajo(entorno) && !colisionaConPiedra(0, 5)) {
 		    Gondolf.MoverAbajo();
 		}
-	
+		entorno.dibujarImagen(fondo, entorno.ancho() / 2, entorno.alto() / 2, 0);
 		
 		if (enemigosVivos < 10 && totalCreados < 50) {
 			    for (int i = 0; i < enemigos.length; i++) {
@@ -143,6 +157,22 @@ public class Juego extends InterfaceJuego
         	  Enemigo e = enemigos[i];
               if (e != null) {
                   e.moverHacia(Gondolf.getX(), Gondolf.getY());
+                  
+               // Verificar si el hechizo toca a este enemigo
+                  if (hechizoActivo && entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
+                      if (circuloAgua != null && circuloAgua.colisionaCon(e)) {
+                          enemigos[i] = null;
+                          enemigosVivos--;
+                      }
+                  }
+                  
+                  if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
+                	  if (hechizoFuegoActivo && circuloFuego != null && circuloFuego.colisionaCon(e)) {
+                          enemigos[i] = null;
+                          enemigosVivos--;
+                          Gondolf.restarMana(); // baja el mana al impactar
+                      }
+                  }
                   
                   if (e.colisionaCon(Gondolf.getX(), Gondolf.getY(), 20)) {
                       enemigos[i] = null;
@@ -165,6 +195,14 @@ public class Juego extends InterfaceJuego
                     }
                   }   
                }
+     // Desactivar hechizos (solo una vez, fuera del for)
+        if (hechizoActivo && entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
+            hechizoActivo = false;
+        }
+
+        if (hechizoFuegoActivo && entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
+            hechizoFuegoActivo = false;
+        }
 
         			for (int i = 0; i < pociones.length; i++) {
         				if (pociones[i] != null) {
@@ -191,10 +229,39 @@ public class Juego extends InterfaceJuego
             }
         }
         
-        entorno.dibujarImagen(fondo, entorno.ancho() / 2, entorno.alto() / 2, 0);
+     // Activar el hechizo cuando se hace click en el botón
+        if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
+            if (botonBombaAgua.estaDentro(entorno.mouseX(), entorno.mouseY())) {
+                hechizoActivo = true;
+                entorno.dibujarImagen(imagenAgua, circuloAgua.getX(), circuloAgua.getY(), 0, 0.2);
+            }
+        }
+
+        // Si el hechizo está activo, actualizar su posición y dibujarlo
+        if (hechizoActivo && circuloAgua != null) {
+            circuloAgua.setX(entorno.mouseX());
+            circuloAgua.setY(entorno.mouseY());
+            entorno.dibujarImagen(imagenAgua, circuloAgua.getX(), circuloAgua.getY(), 0, 0.2);
+        } 
+        
+        if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
+            if (botonTormentaFuego.estaDentro(entorno.mouseX(), entorno.mouseY())) {
+            	if (Gondolf.getMana() >= 10) {
+            		hechizoFuegoActivo = true;
+            		entorno.dibujarImagen(imagenFuego, circuloFuego.getX(), circuloFuego.getY(), 0, 0.5);
+            	}
+            }
+        }
+        
+        if (hechizoFuegoActivo && circuloFuego != null) {
+            circuloFuego.setX(entorno.mouseX());
+            circuloFuego.setY(entorno.mouseY());
+            entorno.dibujarImagen(imagenFuego, circuloFuego.getX(), circuloFuego.getY(), 0, 0.5);
+        }
 
         this.dibujarObjetos();
         
+        entorno.dibujarRectangulo(713, 182, 176, 320, 0, Color.black);
         tituloHechizos.dibujar(entorno);
         botonBombaAgua.dibujar(entorno);
         botonTormentaFuego.dibujar(entorno);
@@ -219,18 +286,6 @@ public class Juego extends InterfaceJuego
         }
         botonSeleccionado = b;
         botonSeleccionado.setSeleccionado(true);
-    }
-    
- // Método para lanzar hechizo que limpia la selección
-    public void lanzarHechizo() {
-        if (botonSeleccionado != null) {
-            // lógica para lanzar el hechizo según botonSeleccionado
-            // ...
-
-            // Luego deseleccionamos el botón
-            botonSeleccionado.setSeleccionado(false);
-            botonSeleccionado = null;
-        }
     }
 	
 	public void dibujarObjetos() {
