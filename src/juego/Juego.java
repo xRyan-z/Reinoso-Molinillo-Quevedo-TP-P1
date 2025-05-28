@@ -75,16 +75,16 @@ public class Juego extends InterfaceJuego
 		int posY_TormentaFuego = 290;
 		
 		botonBombaAgua = new Boton(posX, posY_BombaAgua, menuAncho, menuAlto, Color.black);
-        botonBombaAgua.setTexto("BOMBA DE AGUA");
-        botonBombaAgua.setFuente("impact", 17, Menu.getlight_brown());
+        botonBombaAgua.setTexto("BOMBA DE AGUA"); //texto que muestra en pantalla
+        botonBombaAgua.setFuente("impact", 17, Menu.getlight_brown()); //fuente, tamaño y color del texto
 
         botonTormentaFuego = new Boton(posX, posY_TormentaFuego, menuAncho, menuAlto, Color.black);
-        botonTormentaFuego.setTexto("TORMENTA DE FUEGO");
-        botonTormentaFuego.setFuente("impact", 17, Menu.getlight_brown());
+        botonTormentaFuego.setTexto("TORMENTA DE FUEGO"); //texto que muestra en pantalla
+        botonTormentaFuego.setFuente("impact", 17, Menu.getlight_brown()); //fuente, tamaño y color del texto
 
         tituloHechizos = new Menu(posX, posY_Titulo, tituloAlto, menuAncho, Menu.getBrown());
-        tituloHechizos.setTexto("HECHIZOS");
-        tituloHechizos.setFuente("impact", 22, Color.WHITE);
+        tituloHechizos.setTexto("HECHIZOS"); //texto que muestra en pantalla
+        tituloHechizos.setFuente("impact", 22, Color.WHITE); //fuente, tamaño y color del texto
         
         pvida = new Menu(posX, posY_Titulo + 400, tituloAlto , menuAncho, Color.red); 
         pvida.setFuente("Impact", 20, Color.BLACK);
@@ -92,8 +92,8 @@ public class Juego extends InterfaceJuego
         pmana = new Menu(posX, posY_Titulo + 450, tituloAlto , menuAncho, Color.blue);
         pmana.setFuente("Impact", 20, Color.BLACK);
         
-        circuloAgua = new Hechizos(100, 100, 200, 200, 40, Color.green);
-        circuloFuego = new Hechizos(300, 300, 600, 600, 80, Color.blue);
+        circuloAgua = new Hechizos(100, 100, 200, 200, 40, Color.green); //tamaño y color del circulo de Bomba de Agua
+        circuloFuego = new Hechizos(300, 300, 600, 600, 80, Color.blue); //tamaño y color del circulo de Tormenta de Fuego
         
         this.imagenFuego = new ImageIcon("Imagenes/tormentaDeFuego.gif").getImage();
         this.imagenAgua = new ImageIcon("Imagenes/bombaDeAgua.gif").getImage();
@@ -121,6 +121,8 @@ public class Juego extends InterfaceJuego
 		    botonSeleccionado = null;
 		    hechizoActivo = false;
 		    hechizoFuegoActivo = false;
+		    botonBombaAgua.setSeleccionado(false);
+		    botonTormentaFuego.setSeleccionado(false);
 
 		    for (int i = 0; i < pociones.length; i++) {
 		        pociones[i] = null;
@@ -218,28 +220,22 @@ public class Juego extends InterfaceJuego
                   e.moverHacia(Gondolf.getX(), Gondolf.getY());
                   
                // Verificar si el hechizo toca a este enemigo
-                  if (hechizoActivo && entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
+                  if (hechizoActivo && entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) { // se selecciona el boton
                       if (circuloAgua != null && circuloAgua.colisionaCon(e)) {
-                          enemigos[i] = null;
+                          enemigos[i] = null; //si el hechizo colisiona con el murcielago, este muere
                           EnemigosEliminados++;
-                          enemigosVivos--;
+                          enemigosVivos--; //si el murcielago muere se resta de los enemigos 
                       }
                      
                   }
                   
-                  if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
+                  if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) { // se selecciona el boton
                 	  if (hechizoFuegoActivo && circuloFuego != null && circuloFuego.colisionaCon(e)) {
-                          enemigos[i] = null;
-                          EnemigosEliminados++;
-                          enemigosVivos--;
-                          Gondolf.restarMana(); // baja el mana al impactar
+                          enemigos[i] = null; //si el hechizo colisiona con el murcielago, este muere
+                          EnemigosEliminados++; 
+                          enemigosVivos--; //si el murcielago muere se resta de los enemigos 
                       }
-                	  
-                	  
                   }
-                  
-               
-                  
                   
                   if (e.colisionaCon(Gondolf.getX(), Gondolf.getY(), 20)) {
                       enemigos[i] = null;
@@ -278,13 +274,16 @@ public class Juego extends InterfaceJuego
         	}
         }
         
-     // Desactivar hechizos (solo una vez, fuera del for)
-        if (hechizoActivo && entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
-            hechizoActivo = false;
+     // Desactivar hechizos (fuera del for)
+        if (hechizoActivo && entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) { // se selecciona el boton
+            hechizoActivo = false; // se desactiva el hechio luego de ser lanzado
+            botonBombaAgua.setSeleccionado(false); // una vez que se lanza se deselecciona el boton
         }
 
-        if (hechizoFuegoActivo && entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
-            hechizoFuegoActivo = false;
+        if (hechizoFuegoActivo && entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) { // se selecciona el boton
+            hechizoFuegoActivo = false; // se desactiva el hechio luego de ser lanzado
+            botonTormentaFuego.setSeleccionado(false); // una vez que se lanza se deselecciona el boton
+            Gondolf.restarMana(); // baja el mana por lanzamiento
         }
 
         			for (int i = 0; i < pociones.length; i++) {
@@ -332,6 +331,11 @@ public class Juego extends InterfaceJuego
             	if (Gondolf.getMana() >= 10) {
             		hechizoFuegoActivo = true;
             		entorno.dibujarImagen(imagenFuego, circuloFuego.getX(), circuloFuego.getY(), 0, 0.5);
+            	}
+            	else {
+            		if(Gondolf.getMana()==0) {
+            			botonTormentaFuego.setSeleccionado(false);
+            		}
             	}
             }
         }

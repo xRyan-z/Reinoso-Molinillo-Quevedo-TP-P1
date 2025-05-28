@@ -5,7 +5,7 @@ import entorno.Entorno;
 
 public class Hechizos {
 	private double x;
-    private double y;
+	private double y;
     private double diametro;
     private Color color;
 
