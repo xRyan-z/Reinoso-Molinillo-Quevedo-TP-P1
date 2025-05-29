@@ -36,7 +36,7 @@ public class Juego extends InterfaceJuego
     private Hechizos circuloFuego;
     private Image imagenFuego;
     private Image imagenAgua;
-    private Jefe Jefe;
+    private Jefe jefe;
     private boolean jefeGenerado = false;
     private Disparo[] disparo = new Disparo[500];
     private int contadorDisparoJefe = 0;
@@ -60,7 +60,7 @@ public class Juego extends InterfaceJuego
 		this.piedras[1] = new Piedra (300, 100, 50,50, "Imagenes/piedra.png");
 		this.piedras[2] = new Piedra (500, 300, 50,50, "Imagenes/piedra.png");
 		this.piedras[3] = new Piedra (250, 500, 50,50, "Imagenes/piedra.png");
-		this.Jefe = new Jefe(320,0,70,70, Color.blue);
+		this.jefe = new Jefe(320,0,70,70, Color.blue);
 		this.EnemigosEliminados = 0;
 		
 		int panelWidth = entorno.ancho();  // 800
@@ -143,12 +143,13 @@ public class Juego extends InterfaceJuego
 		    hechizoActivo = false;
 		    hechizoFuegoActivo = false;
 		    juegoGanado = false;
-		    Jefe = new Jefe(320, 0, 70, 70, Color.blue); // ← Esto es clave
+		    jefe = new Jefe(320, 0, 70, 70, Color.blue); // ← Esto es clave
 
 		    for (int i = 0; i < pociones.length; i++) {
 		        pociones[i] = null;
 		    }
 		}
+	
 	
 	public void tick()
 	{ 		//System.out.println(">> tick() frame");
@@ -184,7 +185,7 @@ public class Juego extends InterfaceJuego
 	        return; // cancelo el resto del tick
 	    }
 	    
-	    if (Jefe.getVida() <= 0) {
+	    if (jefe != null && jefe.getVida() <= 0) {
 	        juegoGanado = true;
 	        return; // cancelo el resto del tick
 	    }
@@ -222,12 +223,22 @@ public class Juego extends InterfaceJuego
                // Verificar si el hechizo toca a este enemigo
                   if (hechizoActivo && entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) { // se selecciona el boton
                       if (circuloAgua != null && circuloAgua.colisionaCon(e)) {
-                          enemigos[i] = null; //si el hechizo colisiona con el murcielago, este muere
+                    	  int ex = enemigos[i].getX();
+                          int ey = enemigos[i].getY();
+                    	  enemigos[i] = null; //si el hechizo colisiona con el murcielago, este muere
                           EnemigosEliminados++;
                           enemigosVivos--; //si el murcielago muere se resta de los enemigos 
+                          if (Gondolf.getVida() <= 30) {
+                        	  for (int j = 0; j < pociones.length; j++) {
+                                  if (pociones[j] == null) {
+                                      pociones[j] = new Pocion(ex, ey);
+                                      break;
+                          }
                       }
                      
                   }
+                      }     
+                      }           
                   
                   if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) { // se selecciona el boton
                 	  if (hechizoFuegoActivo && circuloFuego != null && circuloFuego.colisionaCon(e)) {
@@ -246,31 +257,21 @@ public class Juego extends InterfaceJuego
                           juegoTerminado = true;
                           return;
                       }
-                   // Murcielagos=null y vida del mago <=30, se deposita mediante el murcielago una pocion.
-                      	if (Gondolf.getVida() <= 30) {
-                    	  for(int j=0; j<pociones.length; j++) {
-                    		  if (pociones[j]==null){
-                    			  pociones[j]= new Pocion (e.getX(), e.getY());
-                    			  break;
-                    		}
-                          }
-                       }
-                    }
-                  }   
-               }
-        
+                   	}
+                 }
+              }
         if (totalCreados == 50 && enemigosVivos == 0 && !jefeGenerado) {
 			jefeGenerado = true;
 			// Genera al jefe
 		}
         if (hechizoActivo && entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
-        	if (circuloAgua !=null && circuloAgua.colisionaCon(Jefe)) {
-          	  Jefe.restarvida(10); 
+        	if (circuloAgua !=null && circuloAgua.colisionaCon(jefe)) {
+          	  jefe.restarvida(10); 
             }
         }
         if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
-        	if (hechizoFuegoActivo && circuloFuego != null && circuloFuego.colisionaCon(Jefe)) {
-        		 Jefe.restarvida(30); 
+        	if (hechizoFuegoActivo && circuloFuego != null && circuloFuego.colisionaCon(jefe)) {
+        		 jefe.restarvida(30); 
         	}
         }
         
@@ -361,7 +362,7 @@ public class Juego extends InterfaceJuego
         
         for (int i = 0; i < pociones.length; i++) {
             Pocion p = pociones[i];
-            if (p != null && p.colisionaCon(Gondolf.getX(), Gondolf.getY(), 20)) {
+            if (p != null && p.colisionaCon(Gondolf.getX(), Gondolf.getY(), 20)) { //SUMA VIDA AL COLISIONAR GONDOLF Y POCION
                 Gondolf.sumarvida(); 
                 pociones[i] = null;  // Quita la poción del suelo
             }
@@ -387,18 +388,18 @@ public class Juego extends InterfaceJuego
         for (Enemigo e : enemigos) {
             if (e != null) e.dibujar(entorno);
 		  }
-        if (jefeGenerado && Jefe != null) {
-        	Jefe.dibujar(entorno);
-        	Jefe.mover(entorno);
+        if (jefeGenerado && jefe != null) {
+        	jefe.dibujar(entorno);
+        	jefe.mover(entorno);
         	
         	contadorDisparoJefe++;
         	
-        	 if (jefeGenerado && Jefe != null) {
-        		 System.out.println(Jefe.mostrarvida());
+        	 if (jefeGenerado && jefe != null) {
+        		 System.out.println(jefe.mostrarvida());
                  // Crear un nuevo disparo si hay espacio libre
                  for (int i = 0; i < disparo.length; i++) {
                      if (disparo[i] == null && contadorDisparoJefe % 50 == 0){
-                         disparo[i] = new Disparo(Jefe.getX(), Jefe.getY() + Jefe.getAlto() / 2, 15, 15);
+                         disparo[i] = new Disparo(jefe.getX(), jefe.getY() + jefe.getAlto() / 2, 15, 15);
                          break; // solo crea un disparo por tick
                      }
                  }
