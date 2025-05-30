@@ -40,9 +40,9 @@ public class Gondolf {
     }
            		
     	
-        public int restarvida() {
+        public int restarvida(int v) {
         	if(vida > 0) {
-        	vida = vida - 10;
+        	vida = vida - v;
         	} else {
         	}
         		
@@ -63,12 +63,11 @@ public class Gondolf {
             return vidamostrada;
             }     
         
-        public int restarMana() {
+        public int restarMana(int j) {
         	if(mana > 0) {
-        	mana = mana - 10;
-        	System.out.println(mana);
-        	} else {
-        	}
+        	mana = mana - j;
+        	
+        	} 
         return mana;
 
     }
@@ -121,11 +120,21 @@ public class Gondolf {
         return this.y + this.alto / 2 >= entorno.alto()-5;
     }
 
-    public boolean colisionaCon(Piedra p) {
-        return Math.abs(this.x - p.getX()) < (this.ancho / 2 + p.getAncho() / 2) &&
-               Math.abs(this.y - p.getY()) < (this.alto / 2 + p.getAlto() / 2);
+    public boolean colisionaConPiedra(int dx, int dy, Piedra[] piedras) {
+	    for (Piedra p :  piedras ) {
+	        // Calculamos dónde estaría Gondolf si se moviera
+	        int futuroX = getX() + dx;
+	        int futuroY = getY() + dy;
 
-    }
+	        // Verificamos si en esa posición estaría tocando una piedra
+	        if (Math.abs(futuroX - p.getX()) < (getAncho() / 2 + p.getAncho() / 2) &&
+	            Math.abs(futuroY - p.getY()) < (getAlto() / 2 + p.getAlto() / 2)) {
+	            return true; // Hay colisión
+	        }
+	    }
+	    return false; // No hay colisión
+	}
+    
     public int getX() {
         return x;
     }

@@ -55,6 +55,10 @@ public class Jefe {
         return this.x - this.ancho/2 <= 0;
     }
 
+    public boolean colisionaCon(int otroX, int otroY, int margen) {
+        return Math.abs(this.x - otroX) < margen && Math.abs(this.y - otroY) < margen;
+    }
+    
     public int restarvida(int a) {
     	if(vida > 0) {
     	vida = vida - a;

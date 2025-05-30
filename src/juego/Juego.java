@@ -31,16 +31,17 @@ public class Juego extends InterfaceJuego
     private Boton botonTormentaFuego;
     private Boton botonSeleccionado;
     private Hechizos circuloAgua;
+    private Hechizos circuloFuego;
     boolean hechizoActivo = false;
     boolean hechizoFuegoActivo = false;
-    private Hechizos circuloFuego;
     private Image imagenFuego;
     private Image imagenAgua;
     private Jefe jefe;
     private boolean jefeGenerado = false;
-    private Disparo[] disparo = new Disparo[500];
+    private Disparo[] disparo = new Disparo[1];
     private int contadorDisparoJefe = 0;
     private int EnemigosEliminados;
+    private Menu JefeVida;
 	
 	// Variables y métodos propios de cada grupo
 	// ...
@@ -98,8 +99,11 @@ public class Juego extends InterfaceJuego
         this.imagenFuego = new ImageIcon("Imagenes/tormentaDeFuego.gif").getImage();
         this.imagenAgua = new ImageIcon("Imagenes/bombaDeAgua.gif").getImage();
         
-        CDEnemigosEliminados = new Menu(posX, posY_Titulo + 500, tituloAlto , menuAncho, Color.GRAY); 
+        CDEnemigosEliminados = new Menu(posX, posY_Titulo + 500, tituloAlto , menuAncho, Color.ORANGE); 
         CDEnemigosEliminados.setFuente("Impact", 13, Color.BLACK);
+        
+        JefeVida = new Menu(300,570, tituloAlto, menuAncho, Color.cyan);
+        JefeVida.setFuente("Impact",13, Color.BLACK);
 	}
 
 	/**
@@ -190,18 +194,18 @@ public class Juego extends InterfaceJuego
 	        return; // cancelo el resto del tick
 	    }
 	    
-		if (entorno.estaPresionada('a') && !Gondolf.colisionaPorIzquierda(entorno) && !colisionaConPiedra(-5, 0)) {
+	    if (entorno.estaPresionada('a') && !Gondolf.colisionaPorIzquierda(entorno) && !Gondolf.colisionaConPiedra(-3, 0, piedras)) {
 		    Gondolf.MoverIzq();
 		}
-		if (entorno.estaPresionada('d') && !Gondolf.colisionaPorDerecha(entorno) && !colisionaConPiedra(5, 0)) {
+		if (entorno.estaPresionada('d') && !Gondolf.colisionaPorDerecha(entorno) && !Gondolf.colisionaConPiedra (3, 0,piedras)) {
 		    Gondolf.MoverDer();
 		}
-		if (entorno.estaPresionada('w') && !Gondolf.colisionaPorArriba(entorno) && !colisionaConPiedra(0, -5)) {
+		if (entorno.estaPresionada('w') && !Gondolf.colisionaPorArriba(entorno) && !Gondolf.colisionaConPiedra(0, -3, piedras)) {
 		    Gondolf.MoverArriba();
 		}
-		if (entorno.estaPresionada('s') && !Gondolf.colisionaPorAbajo(entorno) && !colisionaConPiedra(0, 5)) {
+		if (entorno.estaPresionada('s') && !Gondolf.colisionaPorAbajo(entorno) && !Gondolf.colisionaConPiedra(0, 3, piedras)) {
 		    Gondolf.MoverAbajo();
-		}
+		}  
 		entorno.dibujarImagen(fondo, entorno.ancho() / 2, entorno.alto() / 2, 0);
 		
 		if (enemigosVivos < 10 && totalCreados < 50) {
@@ -251,7 +255,8 @@ public class Juego extends InterfaceJuego
                   if (e.colisionaCon(Gondolf.getX(), Gondolf.getY(), 20)) {
                       enemigos[i] = null;
                       enemigosVivos--;
-                      Gondolf.restarvida();
+                      EnemigosEliminados++;
+                      Gondolf.restarvida(10);
                       
                       if (Gondolf.getVida() <= 0) {
                           juegoTerminado = true;
@@ -275,6 +280,11 @@ public class Juego extends InterfaceJuego
         	}
         }
         
+        if (jefe.colisionaCon(Gondolf.getX(), Gondolf.getY(), 20)) {
+        	Gondolf.restarvida(1);
+        }
+        
+        
      // Desactivar hechizos (fuera del for)
         if (hechizoActivo && entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) { // se selecciona el boton
             hechizoActivo = false; // se desactiva el hechio luego de ser lanzado
@@ -284,7 +294,7 @@ public class Juego extends InterfaceJuego
         if (hechizoFuegoActivo && entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) { // se selecciona el boton
             hechizoFuegoActivo = false; // se desactiva el hechio luego de ser lanzado
             botonTormentaFuego.setSeleccionado(false); // una vez que se lanza se deselecciona el boton
-            Gondolf.restarMana(); // baja el mana por lanzamiento
+            Gondolf.restarMana(10); // baja el mana por lanzamiento
         }
 
         			for (int i = 0; i < pociones.length; i++) {
@@ -391,11 +401,12 @@ public class Juego extends InterfaceJuego
         if (jefeGenerado && jefe != null) {
         	jefe.dibujar(entorno);
         	jefe.mover(entorno);
+        	JefeVida.setTexto("Vida del Jefe Final: "  + jefe.getVida());
+        	JefeVida.dibujar(entorno);
+        	
         	
         	contadorDisparoJefe++;
         	
-        	 if (jefeGenerado && jefe != null) {
-        		 System.out.println(jefe.mostrarvida());
                  // Crear un nuevo disparo si hay espacio libre
                  for (int i = 0; i < disparo.length; i++) {
                      if (disparo[i] == null && contadorDisparoJefe % 50 == 0){
@@ -409,7 +420,7 @@ public class Juego extends InterfaceJuego
                          disparo[j].mover();
                          if(disparo[j].ColisionaCon(Gondolf.getX(), Gondolf.getY(), 20)) {
                         	 disparo[j] = null;
-                        	 Gondolf.restarvida();
+                        	 Gondolf.restarvida(10);
                         	 break;
                          }    
                          
@@ -423,15 +434,11 @@ public class Juego extends InterfaceJuego
         	if (pociones[i]!= null) {
         		pociones[i].dibujar(entorno);
         	}
-        }
-        	 }
-        }
-        	 }
-        	 }
-	}
-	
-	
-	
+         }
+       }
+      }
+    }
+  }
 	
 	
 	private Enemigo generarMurcielagoAleatorio() {
@@ -447,21 +454,6 @@ public class Juego extends InterfaceJuego
 	    }
 
 	    return new Enemigo(x, y, 20, 20);
-	}
-	
-	public boolean colisionaConPiedra(int dx, int dy) {
-	    for (Piedra p : piedras) {
-	        // Calculamos dónde estaría Gondolf si se moviera
-	        int futuroX = Gondolf.getX() + dx;
-	        int futuroY = Gondolf.getY() + dy;
-
-	        // Verificamos si en esa posición estaría tocando una piedra
-	        if (Math.abs(futuroX - p.getX()) < (Gondolf.getAncho() / 2 + p.getAncho() / 2) &&
-	            Math.abs(futuroY - p.getY()) < (Gondolf.getAlto() / 2 + p.getAlto() / 2)) {
-	            return true; // Hay colisión
-	        }
-	    }
-	    return false; // No hay colisión
 	}
 	
 	
