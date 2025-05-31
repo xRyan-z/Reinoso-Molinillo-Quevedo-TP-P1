@@ -267,6 +267,7 @@ public class Juego extends InterfaceJuego
                       enemigos[i] = null;
                       EnemigosEliminados++;
                       enemigosVivos--;
+                      Gondolf.restarMana(5); 
                   }
                   
                   if (e.colisionaCon(Gondolf.getX(), Gondolf.getY(), 20)) {
@@ -366,7 +367,7 @@ public class Juego extends InterfaceJuego
         
         if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
             if (botonTormentaFuego.estaDentro(entorno.mouseX(), entorno.mouseY())) {
-            	if (Gondolf.getMana() >= 10) {
+            	if (Gondolf.getMana() >= 20) {
             		hechizoFuegoActivo = true;
             		entorno.dibujarImagen(imagenFuego, circuloFuego.getX(), circuloFuego.getY(), 0, 0.5);
             	}
@@ -398,6 +399,11 @@ public class Juego extends InterfaceJuego
             circuloRociador.setX(entorno.mouseX());
             circuloRociador.setY(entorno.mouseY());
             entorno.dibujarImagen(imagenRociador, circuloRociador.getX(), circuloRociador.getY(), 0, 0.2);
+        }
+     // Verificar si el maná llegó a 0
+        if (Gondolf.getMana() == 0) {
+            hechizoRociadorActivo = false;
+            botonRociador.setSeleccionado(false);
         }
 
         this.dibujarObjetos();
