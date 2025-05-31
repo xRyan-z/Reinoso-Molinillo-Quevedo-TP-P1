@@ -41,6 +41,22 @@ import javax.swing.ImageIcon;
 	    // Getters
 	    public int getX() { return x; }
 	    public int getY() { return y; }
+	    
+	    public static Enemigo generarMurcielagoAleatorio() {
+		    int lado = (int)(Math.random() * 4); // 0=arriba, 1=derecha, 2=abajo, 3=izquierda
+		    int x = 0;
+		    int y = 0;
+		    
+		    switch (lado) {
+		        case 0: x = (int)(Math.random() * 625); y = -20; break;       // arriba
+		        case 1: x = 620; y = (int)(Math.random() * 600); break;       // derecha
+		        case 2: x = (int)(Math.random() * 625); y = 620; break;       // abajo
+		        case 3: x = -20; y = (int)(Math.random() * 600); break;       // izquierda
+		    }
+
+		    return new Enemigo(x, y, 20, 20);
+		}
+		
 
 	}
 
