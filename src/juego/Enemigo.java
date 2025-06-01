@@ -17,17 +17,16 @@ import javax.swing.ImageIcon;
 	    
 	    // Movimiento hacia el objetivo (Gondolf)
 	    public void moverHacia(int objetivoX, int objetivoY) {
-	        double dx = objetivoX - this.x;
+	        double dx = objetivoX - this.x; 
 	        double dy = objetivoY - this.y;
-	        double distancia = Math.sqrt(dx * dx + dy * dy);
+	        double distancia = Math.sqrt(dx * dx + dy * dy); // Distancia total al objetivo (pitágoras)
 
 	        if (distancia > 0) {
-	            this.x += (int)(dx / distancia * 2); // velocidad
+	            this.x += (int)(dx / distancia * 2); // Normaliza el vector y se mueve con velocidad 2
 	            this.y += (int)(dy / distancia * 2);
 	        }
 	    }
 
-	    // Dibujar el murciélago 
 	    public void dibujar(Entorno entorno) {
 	    	entorno.dibujarImagen(imagenes, x, y, 0);
 	    }
@@ -35,18 +34,19 @@ import javax.swing.ImageIcon;
 	    
 	    // Método para detectar si colisiona con el jugador (Gondolf)
 	    public boolean colisionaCon(int otroX, int otroY, int margen) {
-	        return Math.abs(this.x - otroX) < margen && Math.abs(this.y - otroY) < margen;
+	        return Math.abs(this.x - otroX) < margen && Math.abs(this.y - otroY) < margen; // Colisión por proximidad (radio)
 	    }
 
-	    // Getters
+	 // Getters para obtener la posición actual del murciélago
 	    public int getX() { return x; }
 	    public int getY() { return y; }
 	    
 	    public static Enemigo generarMurcielagoAleatorio() {
-		    int lado = (int)(Math.random() * 4); // 0=arriba, 1=derecha, 2=abajo, 3=izquierda
+		    int lado = (int)(Math.random() * 4); // Elige un borde al azar (0 a 3)
 		    int x = 0;
 		    int y = 0;
 		    
+		 // Define coordenadas dependiendo del lado
 		    switch (lado) {
 		        case 0: x = (int)(Math.random() * 625); y = -20; break;       // arriba
 		        case 1: x = 620; y = (int)(Math.random() * 600); break;       // derecha
