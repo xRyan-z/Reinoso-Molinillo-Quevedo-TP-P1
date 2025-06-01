@@ -317,7 +317,6 @@ public class Juego extends InterfaceJuego
         if (hechizoRociadorActivo && entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) { // se selecciona el boton
             hechizoRociadorActivo = false; // se desactiva el hechizo luego de ser lanzado
             botonRociador.setSeleccionado(false); // una vez que se lanza se deselecciona el boton
-            Gondolf.restarMana(10); // baja el mana por uso
         }
 
         			for (int i = 0; i < pociones.length; i++) {
