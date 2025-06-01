@@ -12,21 +12,21 @@ public class Juego extends InterfaceJuego
 {
 	// El objeto Entorno que controla el tiempo y otros
 	private Entorno entorno;
-	private Gondolf Gondolf;
-	private Image fondo;
-	private Piedra[] piedras = new Piedra [4];
-	private boolean juegoTerminado = false;
-	private boolean juegoGanado = false;
+	private Gondolf Gondolf; // Creo un objeto Gondolf
+	private Image fondo; // Creo un objeto Fondo
+	private Piedra[] piedras = new Piedra [4]; // Creo una cierta cantidad de piedra
+	private boolean juegoTerminado = false; // Bandera que funciona si el juego está terminado
+	private boolean juegoGanado = false; // Bandera que funciona si el juego se ganó
 	private Pocion[] pociones= new Pocion [20];
 	
-	private Enemigo[] enemigos = new Enemigo[10];
-	private int enemigosVivos = 0;
-	private int totalCreados = 0;
+	private Enemigo[] enemigos = new Enemigo[10]; 
+	private int enemigosVivos = 0; // cuenta los enemigos vivos
+	private int totalCreados = 0; // cuenta los enemigos creados
 	
 	private Menu tituloHechizos;
-	private Menu pvida;
-	private Menu pmana;
-	private Menu CDEnemigosEliminados;
+	private Menu pvida; // creo un objeto menu que mostrará la vida del personaje
+	private Menu pmana;// creo un objeto menu que mostrará el maná del personaje
+	private Menu CDEnemigosEliminados; // creo un objeto menu que mostrará la cantidad de enemigos eliminados
     private Boton botonBombaAgua;
     private Boton botonTormentaFuego;
     private Boton botonSeleccionado;
@@ -40,20 +40,20 @@ public class Juego extends InterfaceJuego
     private Image imagenFuego;
     private Image imagenAgua;
     private Image imagenRociador;
-    private Jefe jefe;
-    private boolean jefeGenerado = false;
-    private Disparo[] disparo = new Disparo[1];
-    private int contadorDisparoJefe = 0;
-    private int EnemigosEliminados;
-    private Menu JefeVida;
+    private Jefe jefe; // Creo un objeto jefe
+    private boolean jefeGenerado = false; // Bandera que se pone en true si el jefe está generado
+    private Disparo[] disparo = new Disparo[10]; // Creo objetos disparo y que serán 10
+    private int contadorDisparoJefe = 0; // Contador de disparos del jefe
+    private int EnemigosEliminados; // Cuenta la cantidad de enemigos eliminados
+    private Menu JefeVida; // Objeto tipo menú que mostrará la vida del personaje
 	
 	// Variables y métodos propios de cada grupo
 	// ...
 	
 	Juego() {
-		this.fondo = new ImageIcon("Imagenes/Pisodetierra.png").getImage();
+		this.fondo = new ImageIcon("Imagenes/Pisodetierra.png").getImage(); // Muestra el fondo del juego
 		// Idnicializa el objeto entorno
-		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
+		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600); // Proporciones de la pantalla
 		
 		// Inicializar lo que haga falta para el juego
 		// ...
@@ -61,12 +61,13 @@ public class Juego extends InterfaceJuego
 		// Inicia el juego!
 		this.entorno.iniciar();
 		this.Gondolf = new Gondolf(300, 300, 50, 50, 100, 100);
-		this.piedras[0] = new Piedra (200, 300, 50,50, "Imagenes/piedra.png");
-		this.piedras[1] = new Piedra (300, 100, 50,50, "Imagenes/piedra.png");
-		this.piedras[2] = new Piedra (500, 300, 50,50, "Imagenes/piedra.png");
-		this.piedras[3] = new Piedra (250, 500, 50,50, "Imagenes/piedra.png");
-		this.jefe = new Jefe(320,0,70,70, Color.blue);
-		this.EnemigosEliminados = 0;
+		this.piedras[0] = new Piedra (200, 300, 50,50); // Creo una piedra en las posiciones dadas.
+		this.piedras[1] = new Piedra (300, 100, 50,50); // Creo una piedra en las posiciones dadas.
+		this.piedras[2] = new Piedra (500, 300, 50,50); // Creo una piedra en las posiciones dadas.
+		this.piedras[3] = new Piedra (250, 500, 50,50); // Creo una piedra en las posiciones dadas.
+		this.jefe = new Jefe(320,0,70,70); // Creo al jefe con los parametros dados.
+		this.EnemigosEliminados = 0; // Inicio el contador en 0 de enemigos eliminados
+		
 		
 		int panelWidth = entorno.ancho();  // 800
 		int menuAncho = 150;
@@ -96,11 +97,18 @@ public class Juego extends InterfaceJuego
         botonRociador.setTexto("ROCIADOR"); //texto que muestra en pantalla
         botonRociador.setFuente("impact", 17, Menu.getlight_brown()); //fuente, tamaño y color del texto
         
-        pvida = new Menu(posX, posY_Titulo + 400, tituloAlto , menuAncho, Color.red); 
-        pvida.setFuente("Impact", 20, Color.BLACK);
+        pvida = new Menu(posX, posY_Titulo + 400, tituloAlto , menuAncho, Color.red);  // Posición de la barra de vida y color
+        pvida.setFuente("Impact", 20, Color.BLACK); // Fuente y color de las letras
         
-        pmana = new Menu(posX, posY_Titulo + 450, tituloAlto , menuAncho, Color.blue);
-        pmana.setFuente("Impact", 20, Color.BLACK);
+        pmana = new Menu(posX, posY_Titulo + 450, tituloAlto , menuAncho, Color.blue); // Posición de la barra de mana y color
+        pmana.setFuente("Impact", 20, Color.BLACK);  // Fuente y color de las letras
+        
+        CDEnemigosEliminados = new Menu(posX, posY_Titulo + 500, tituloAlto , menuAncho, Color.ORANGE); // Posición de la barra de enemigos eliminados
+        CDEnemigosEliminados.setFuente("Impact", 13, Color.BLACK); // Fuente y color de las letras
+        
+        JefeVida = new Menu(300,570, tituloAlto, menuAncho, Color.cyan); // Posición de la barra de la vida del jefe
+        JefeVida.setFuente("Impact",13, Color.BLACK); // Fuente y color de las letra
+         
         
         circuloAgua = new Hechizos(100, 100, 200, 200, 40, Color.green); //tamaño y color del circulo de Bomba de Agua
         circuloFuego = new Hechizos(300, 300, 600, 600, 80, Color.blue); //tamaño y color del circulo de Tormenta de Fuego
@@ -108,13 +116,7 @@ public class Juego extends InterfaceJuego
         this.imagenFuego = new ImageIcon("Imagenes/tormentaDeFuego.gif").getImage();
         this.imagenAgua = new ImageIcon("Imagenes/bombaDeAgua.gif").getImage();
         this.imagenRociador = new ImageIcon("Imagenes/rociador.png").getImage();        
-        
-        CDEnemigosEliminados = new Menu(posX, posY_Titulo + 500, tituloAlto , menuAncho, Color.ORANGE); 
-        CDEnemigosEliminados.setFuente("Impact", 13, Color.BLACK);
-        
-        JefeVida = new Menu(300,570, tituloAlto, menuAncho, Color.cyan);
-        JefeVida.setFuente("Impact",13, Color.BLACK);
-	}
+        	}
 
 	/**
 	 * Durante el juego, el método tick() será ejecutado en cada instante y 
@@ -122,7 +124,7 @@ public class Juego extends InterfaceJuego
 	 * actualizar el estado interno del juego para simular el paso del tiempo 
 	 * (ver el enunciado del TP para mayor detalle).
 	 */
-	private void reiniciarJuego() {
+	private void reiniciarJuego() { //Metodo que reinicia el juego con los parametros iniciales
 		  Gondolf = new Gondolf(300, 300, 50, 50, 100, 100);
 		    enemigos = new Enemigo[10];
 		    enemigosVivos = 0;
@@ -144,7 +146,7 @@ public class Juego extends InterfaceJuego
 		    }
 		}
 	
-	private void reiniciarJuegoGanado() {
+	private void reiniciarJuegoGanado() {  //Metodo que reinicia el juego con los parametros iniciales pero tambien reinicia la jefe
 		  Gondolf = new Gondolf(300, 300, 50, 50, 100, 100);
 		    enemigos = new Enemigo[10];
 		    enemigosVivos = 0;
@@ -158,8 +160,11 @@ public class Juego extends InterfaceJuego
 		    hechizoAguaActivo = false;
 		    hechizoFuegoActivo = false;
 		    hechizoRociadorActivo = false;
+		    botonBombaAgua.setSeleccionado(false);
+		    botonTormentaFuego.setSeleccionado(false);
+		    botonRociador.setSeleccionado(false);
 		    juegoGanado = false;
-		    jefe = new Jefe(320, 0, 70, 70, Color.blue); // ← Esto es clave
+		    jefe = new Jefe(320, 0, 70, 70); // ← Esto es clave
 
 		    for (int i = 0; i < pociones.length; i++) {
 		        pociones[i] = null;
@@ -182,7 +187,7 @@ public class Juego extends InterfaceJuego
 
 	        return;
 	    }
-	    
+	    //  Una vez que la vida del jefe llega a 0, se muestra en pantalla: (reinicia ENTER).
 	    if (juegoGanado) {
 	    	Image imagenFondo = new ImageIcon("Imagenes/GANASTE.png").getImage();
 	    	entorno.dibujarImagen(imagenFondo, entorno.ancho() / 2, entorno.alto() / 2, 0);
@@ -193,7 +198,7 @@ public class Juego extends InterfaceJuego
 	        return;
 	    }
 
-	    entorno.escribirTexto("La cantidad de Enemigos eliminados son: "+ EnemigosEliminados, 700, 500);
+	    entorno.escribirTexto("La cantidad de Enemigos eliminados son: "+ EnemigosEliminados, 700, 500); // escribe la cantidad de enemigos dentro del cuadro del menu
 	    
 	    // Chequeo real de vida para activar game over
 	    if (Gondolf.getVida() <= 0) {
@@ -201,24 +206,24 @@ public class Juego extends InterfaceJuego
 	        return; // cancelo el resto del tick
 	    }
 	    
-	    if (jefe != null && jefe.getVida() <= 0) {
+	    if (jefe != null && jefe.getVida() <= 0) { // activo la muerte del jefe
 	        juegoGanado = true;
 	        return; // cancelo el resto del tick
 	    }
 	    
-	    if (entorno.estaPresionada('a') && !Gondolf.colisionaPorIzquierda(entorno) && !Gondolf.colisionaConPiedra(-3, 0, piedras)) {
+	    if (entorno.estaPresionada('a') && !Gondolf.colisionaPorIzquierda(entorno) && !Gondolf.colisionaConPiedra(-3, 0, piedras)) { // movimiento del jugador y colisiones con piedra
 		    Gondolf.MoverIzq();
 		}
-		if (entorno.estaPresionada('d') && !Gondolf.colisionaPorDerecha(entorno) && !Gondolf.colisionaConPiedra (3, 0,piedras)) {
+		if (entorno.estaPresionada('d') && !Gondolf.colisionaPorDerecha(entorno) && !Gondolf.colisionaConPiedra (3, 0,piedras)) {  // movimiento del jugador y colisiones con piedra
 		    Gondolf.MoverDer();
 		}
-		if (entorno.estaPresionada('w') && !Gondolf.colisionaPorArriba(entorno) && !Gondolf.colisionaConPiedra(0, -3, piedras)) {
+		if (entorno.estaPresionada('w') && !Gondolf.colisionaPorArriba(entorno) && !Gondolf.colisionaConPiedra(0, -3, piedras)) {  // movimiento del jugador y colisiones con piedra
 		    Gondolf.MoverArriba();
 		}
-		if (entorno.estaPresionada('s') && !Gondolf.colisionaPorAbajo(entorno) && !Gondolf.colisionaConPiedra(0, 3, piedras)) {
+		if (entorno.estaPresionada('s') && !Gondolf.colisionaPorAbajo(entorno) && !Gondolf.colisionaConPiedra(0, 3, piedras)) {  // movimiento del jugador y colisiones con piedra
 		    Gondolf.MoverAbajo();
 		}  
-		entorno.dibujarImagen(fondo, entorno.ancho() / 2, entorno.alto() / 2, 0);
+		entorno.dibujarImagen(fondo, entorno.ancho() / 2, entorno.alto() / 2, 0); // Dibujo el fondo
 		
 		if (enemigosVivos < 10 && totalCreados < 50) {
 			    for (int i = 0; i < enemigos.length; i++) {
@@ -412,8 +417,8 @@ public class Juego extends InterfaceJuego
         botonBombaAgua.dibujar(entorno);
         botonTormentaFuego.dibujar(entorno);
         botonRociador.dibujar(entorno);
-        pvida.setTexto("Vida: " + Gondolf.mostrarvida()+"%"); // Muestra la vida del personaje
-        pmana.setTexto("Mana: " + Gondolf.mostrarmana()+"%"); //Muestra la vida del personaje
+        pvida.setTexto("Vida: " + Gondolf.getVida()+"%"); // Muestra la vida del personaje
+        pmana.setTexto("Mana: " + Gondolf.getMana()+"%"); //Muestra la vida del personaje
         CDEnemigosEliminados.setTexto("     Enemigos Eliminados: " + EnemigosEliminados);
         pvida.dibujar(entorno);
         pmana.dibujar(entorno);
@@ -458,35 +463,33 @@ public class Juego extends InterfaceJuego
         	
                  // Crear un nuevo disparo si hay espacio libre
                  for (int i = 0; i < disparo.length; i++) {
-                     if (disparo[i] == null && contadorDisparoJefe % 50 == 0){
+                     if (disparo[i] == null && contadorDisparoJefe % 50 == 0){ // controlar que el jefe dispare despues de 50 ticks
                          disparo[i] = new Disparo(jefe.getX(), jefe.getY() + jefe.getAlto() / 2, 15, 15);
                          break; // solo crea un disparo por tick
                      }
                  }
-                 for (int j = 0; j < disparo.length; j++) {
+                 for (int j = 0; j < disparo.length; j++) { 
                      if (disparo[j] != null) {
-                         disparo[j].dibujar(entorno);
-                         disparo[j].mover();
-                         if(disparo[j].ColisionaCon(Gondolf.getX(), Gondolf.getY(), 20)) {
+                         disparo[j].dibujar(entorno); // lo dibujamos en pantalla
+                         disparo[j].mover(); // movimiento del disparo
+                         if(disparo[j].ColisionaCon(Gondolf.getX(), Gondolf.getY(), 20)) { // Colisión con gondolf
                         	 disparo[j] = null;
-                        	 Gondolf.restarvida(10);
+                        	 Gondolf.restarvida(10); // quita 10 de vida a gondolf
                         	 break;
                          }    
                          
-                         if (disparo[j].getY() > entorno.alto()) {
+                         if (disparo[j].getY() > entorno.alto()) { // Si el disparo pasa por el limite la pantalla desaparece
                              disparo[j] = null;
                          }        
                          
-                 
-     
+       }
+      }
+   }
         for (int i=0; i< pociones.length; i++) {
         	if (pociones[i]!= null) {
         		pociones[i].dibujar(entorno);
         	}
          }
-       }
-      }
-    }
   }
 	
 

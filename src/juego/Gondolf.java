@@ -5,20 +5,20 @@ import java.awt.Toolkit;
 import entorno.Entorno;
 
 public class Gondolf {
-    private int x;
-    private int y;
-    private int alto;
-    private int ancho;
-    private int vida;
-    private int mana;
-    private Image imagenDerecha;
-    private Image imagenIzquierda;
-    private Image imagenActual;
-    private Image imagenArriba;
-    private Image imagenAbajo;
+    private int x; // Posición x de Gondolf en la pantalla
+    private int y; // Posición y de Gondolf en la pantalla
+    private int alto; // Alto de Gondolf
+    private int ancho; // Ancho de Gondolf
+    private int vida; // Vida de Gondolf
+    private int mana; // Mana de gondolf
+    private Image imagenDerecha; // Imagen del personaje a la derecha
+    private Image imagenIzquierda; // Imagen del personaje a la izquierda
+    private Image imagenActual; // Imagen del personaje guardada
+    private Image imagenArriba; // Imagen del personaje cuando va a arriba
+    private Image imagenAbajo; // Imagen del personaje cuando va a abajo
     
 
-    public Gondolf (int x , int y, int alto, int ancho, int vida, int mana) {
+    public Gondolf (int x , int y, int alto, int ancho, int vida, int mana) { // Inicializamos a Gondolf
         this.x = x;
         this.y = y;
         this.alto = alto;
@@ -30,17 +30,17 @@ public class Gondolf {
         this.imagenAbajo = Toolkit.getDefaultToolkit().getImage("Imagenes/GondolfNormaloAbajo.png");
         this.imagenArriba = Toolkit.getDefaultToolkit().getImage("Imagenes/Gondolfarriba.png");
 
-        // Imagen inicial por defecto
-        this.imagenActual = imagenAbajo;
+        
+        this.imagenActual = imagenAbajo;   // Imagen inicial por defecto
 
     }
 
-    public void dibujar(Entorno entorno) {
+    public void dibujar(Entorno entorno) { // Metodo que dibuja a Gondolf en pantalla en la posición x,y y escala
         entorno.dibujarImagen(imagenActual, x, y, 0, 1.0);
     }
            		
     	
-        public int restarvida(int v) {
+        public int restarvida(int v) { // Metodo que resta cantidad v de vida.
         	if(vida > 0) {
         	vida = vida - v;
         	} else {
@@ -49,21 +49,14 @@ public class Gondolf {
         return vida;
 
     }
-        public int sumarvida() {
+        public int sumarvida() { // Metodo que suma cantidad 10 de vida.
         	if(vida > 0 && vida < 100) {
         	vida = vida + 10;
-        	
-        	} else {
-        		 System.out.println(vida);
-        	}
+        	} 
         return vida;
     }
-        public String mostrarvida() {
-            String vidamostrada = Integer.toString(vida);
-            return vidamostrada;
-            }     
         
-        public int restarMana(int j) {
+        public int restarMana(int j) { // Metodo que resta cantidad J de Maná
         	if(mana > 0) {
         	mana = mana - j;
         	
@@ -71,52 +64,44 @@ public class Gondolf {
         return mana;
 
     }
-        public int sumarMana() {
+        public int sumarMana() { // Metodo que suma cantidad 10 de Maná.
         	if(mana >= 0 && mana <= 100) {
         	mana = mana + 10;
-        	System.out.println(mana);
-        	} else {
-        		 System.out.println(mana);
-        	}
+      
+        	} 
         return mana;
     }
-        public String mostrarmana() {
-            String manamostrada = Integer.toString(mana);
-            return manamostrada;
-            }  
-        
-        
-
-    public void MoverIzq() {
+           
+    public void MoverIzq() { // Metodo que mueve a Gondfolf -3 en X .
         this.x -=3 ;
         this.imagenActual = imagenIzquierda;
     }
-    public void MoverDer() {
+    public void MoverDer() { // Metodo que mueve a Gondfolf +3 en X .
         this.x +=3 ;
         this.imagenActual = imagenDerecha;
     }
-    public void MoverArriba() {
+    public void MoverArriba() { // Metodo que mueve a Gondfolf -3 en Y .
         this.y -=3 ;
-        this.imagenActual = imagenArriba;
+        this.imagenActual = imagenArriba; // Utiliza la imagen asignada
     }
-    public void MoverAbajo() {
+    public void MoverAbajo() { // Metodo que mueve a Gondfolf +3 en Y .
         this.y +=3 ;
         this.imagenActual = imagenAbajo;
     }
 
-    public boolean colisionaPorDerecha(Entorno entorno) {
+    public boolean colisionaPorDerecha(Entorno entorno) { // Metodo boolean que retorna True si Gondolf toca el borde derecho - El menú.
         return this.x + this.ancho/2 >= entorno.ancho()-175;
     }
 
-    public boolean colisionaPorIzquierda(Entorno entorno) {
+    public boolean colisionaPorIzquierda(Entorno entorno) { // Metodo boolean que retorna True si Gondolf toca el borde izquierdo
         return this.x - this.ancho/2 <= 0;
     }
 
-    public boolean colisionaPorArriba(Entorno entorno) {
+    public boolean colisionaPorArriba(Entorno entorno) {  // Metodo boolean que retorna True si Gondolf toca el borde de Arriba
         return this.y - this.alto / 2 <= 5;
     }
 
-    public boolean colisionaPorAbajo(Entorno entorno) {
+    public boolean colisionaPorAbajo(Entorno entorno) { // Metodo boolean que retorna True si Gondolf toca el borde de Abajo
         return this.y + this.alto / 2 >= entorno.alto()-5;
     }
 
@@ -156,10 +141,6 @@ public class Gondolf {
         return this.vida;
     }
 
-	public void sumarVida() {
-		// TODO Auto-generated method stub
-		
-	}
 	public int getMana() {
 	    return mana;
 	}
