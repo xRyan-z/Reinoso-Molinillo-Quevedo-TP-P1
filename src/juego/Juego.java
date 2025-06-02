@@ -51,7 +51,7 @@ public class Juego extends InterfaceJuego
 	
 	Juego() {
 		this.fondo = new ImageIcon("Imagenes/Pisodetierra.png").getImage(); // Muestra el fondo del juego
-		// Idnicializa el objeto entorno
+		// Inicializa el objeto entorno
 		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600); // Proporciones de la pantalla
 		
 		// Inicializar lo que haga falta para el juego

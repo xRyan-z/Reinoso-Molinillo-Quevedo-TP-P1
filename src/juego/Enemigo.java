@@ -19,10 +19,10 @@ import javax.swing.ImageIcon;
 	    public void moverHacia(int objetivoX, int objetivoY) {
 	        double dx = objetivoX - this.x; 
 	        double dy = objetivoY - this.y;
-	        double distancia = Math.sqrt(dx * dx + dy * dy); // Distancia total al objetivo (pitágoras)
+	        double distancia = Math.sqrt(dx * dx + dy * dy); // Distancia total al objetivo
 
-	        if (distancia > 0) {
-	            this.x += (int)(dx / distancia * 2); // Normaliza el vector y se mueve con velocidad 2
+	        if (distancia > 0) { // Si la distancia es mayor a 0 lo sigue a Gondolf.
+	            this.x += (int)(dx / distancia * 2); 
 	            this.y += (int)(dy / distancia * 2);
 	        }
 	    }

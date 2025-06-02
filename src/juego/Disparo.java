@@ -8,14 +8,13 @@ public class Disparo {
 	private int y; // Posición Y del Disparo en la pantalla
 	private int alto; // Alto del Disparo
 	private int ancho; // Ancho del disparo
-	private Image image; // Importa una imagen
-	
+	private Image image;
 	public Disparo(int x,int y, int alto, int ancho) {  //Parametros para inicializar el disparo
 		this.x = x;
 		this.y = y;
 		this.alto = alto;
 		this.ancho = ancho;
-		this.image = Toolkit.getDefaultToolkit().getImage("Imagenes/Disparo.png");
+		this.image = Toolkit.getDefaultToolkit().getImage("Imagenes/Disparo.png"); // Importa una imagen
 	}
 	
 	
