@@ -12,40 +12,39 @@ public class Juego extends InterfaceJuego
 {
 	// El objeto Entorno que controla el tiempo y otros
 	private Entorno entorno;
-	private Gondolf Gondolf; // Creo un objeto Gondolf
-	private Image fondo; // Creo un objeto Fondo
-	private Piedra[] piedras = new Piedra [4]; // Creo una cierta cantidad de piedra
+	private Gondolf Gondolf; 
+	private Image fondo; 
+	private Piedra[] piedras = new Piedra [4]; 
 	private boolean juegoTerminado = false; // Bandera que funciona si el juego está terminado
 	private boolean juegoGanado = false; // Bandera que funciona si el juego se ganó
-	private Pocion[] pociones= new Pocion [20];
-	
-	private Enemigo[] enemigos = new Enemigo[10]; 
-	private int enemigosVivos = 0; // cuenta los enemigos vivos
-	private int totalCreados = 0; // cuenta los enemigos creados
-	
+	private Pocion[] pociones= new Pocion [20]; //Arreglo de pociones que pueden aparecer en el juego.
+	private Enemigo[] enemigos = new Enemigo[10]; //Arreglo de enemigos activos al mismo tiempo (hasta 10).
+	private int enemigosVivos = 0; 
+	private int totalCreados = 0;  
 	private Menu tituloHechizos;
 	private Menu pvida; // creo un objeto menu que mostrará la vida del personaje
-	private Menu pmana;// creo un objeto menu que mostrará el maná del personaje
-	private Menu CDEnemigosEliminados; // creo un objeto menu que mostrará la cantidad de enemigos eliminados
+	private Menu pmana;
+	private Menu CDEnemigosEliminados; 
+	private Menu JefeVida; 
     private Boton botonBombaAgua; // Botón que selecciona el hechizo de Bomba de Agua
-    private Boton botonTormentaFuego;// Botón que selecciona el hechizo de Tormenta de Fuego
-    private Boton botonRociador; // Botón que selecciona el hechizo tipo Rociador
+    private Boton botonTormentaFuego;
+    private Boton botonRociador; 
     private Boton botonSeleccionado; // Referencia al botón actualmente seleccionado (para resaltarlo o activarlo)
     private Hechizos circuloAgua; // Representación visual del hechizo de Agua en forma de círculo
-    private Hechizos circuloFuego; // Representación visual del hechizo de Fuego en forma de círculo
-    private Hechizos circuloRociador; // Representación visual del hechizo tipo Rociador en forma de círculo
+    private Hechizos circuloFuego; 
+    private Hechizos circuloRociador; 
     boolean hechizoAguaActivo = false; // Bandera para saber si el hechizo de Agua está activo
-    boolean hechizoFuegoActivo = false; // Bandera para saber si el hechizo de Fuego está activo
-    boolean hechizoRociadorActivo = false; // Bandera para saber si el hechizo tipo Rociador está activo
+    boolean hechizoFuegoActivo = false; 
+    boolean hechizoRociadorActivo = false;
     private Image imagenFuego; 
     private Image imagenAgua;
     private Image imagenRociador;
     private Jefe jefe; // Creo un objeto jefe
     private boolean jefeGenerado = false; // Bandera que se pone en true si el jefe está generado
-    private Disparo[] disparo = new Disparo[10]; // Creo objetos disparo y que serán 10
+    private Disparo[] disparo = new Disparo[10]; // Creo objetos disparo que serán 10
     private int contadorDisparoJefe = 0; // Contador de disparos del jefe
     private int EnemigosEliminados; // Cuenta la cantidad de enemigos eliminados
-    private Menu JefeVida; // Objeto tipo menú que mostrará la vida del personaje
+    
 	
 	// Variables y métodos propios de cada grupo
 	// ...
@@ -62,9 +61,9 @@ public class Juego extends InterfaceJuego
 		this.entorno.iniciar();
 		this.Gondolf = new Gondolf(300, 300, 50, 50, 100, 100);
 		this.piedras[0] = new Piedra (200, 300, 50,50); // Creo una piedra en las posiciones dadas.
-		this.piedras[1] = new Piedra (300, 100, 50,50); // Creo una piedra en las posiciones dadas.
-		this.piedras[2] = new Piedra (500, 300, 50,50); // Creo una piedra en las posiciones dadas.
-		this.piedras[3] = new Piedra (250, 500, 50,50); // Creo una piedra en las posiciones dadas.
+		this.piedras[1] = new Piedra (300, 100, 50,50); 
+		this.piedras[2] = new Piedra (500, 300, 50,50); 
+		this.piedras[3] = new Piedra (250, 500, 50,50); 
 		this.jefe = new Jefe(320,0,70,70); // Creo al jefe con los parametros dados.
 		this.EnemigosEliminados = 0; // Inicio el contador en 0 de enemigos eliminados
 		
@@ -124,11 +123,14 @@ public class Juego extends InterfaceJuego
 	 * actualizar el estado interno del juego para simular el paso del tiempo 
 	 * (ver el enunciado del TP para mayor detalle).
 	 */
-	private void reiniciarJuego() { //Metodo que reinicia el juego con los parametros iniciales
+	
+	//reinicia el juego a su estado inicial, como si el jugador hubiera perdido o quisiera volver a empezar desde el principio.
+	private void reiniciarJuego() { //Metodo que reinicia el juego con los parametros iniciales (los que se encuentran debajo)
+		
 		  Gondolf = new Gondolf(300, 300, 50, 50, 100, 100);
-		    enemigos = new Enemigo[10];
-		    enemigosVivos = 0;
-		    totalCreados = 0;
+		    enemigos = new Enemigo[10]; 
+		    enemigosVivos = 0; 
+		    totalCreados = 0; 
 		    EnemigosEliminados = 0;
 		    disparo = new Disparo[500];
 		    contadorDisparoJefe = 0;
@@ -141,12 +143,12 @@ public class Juego extends InterfaceJuego
 		    botonTormentaFuego.setSeleccionado(false);
 		    botonRociador.setSeleccionado(false);
 
-		    for (int i = 0; i < pociones.length; i++) {
+		    for (int i = 0; i < pociones.length; i++) { //Elimina todas las pociones del arreglo al reiniciar el juego.
 		        pociones[i] = null;
 		    }
 		}
 	
-	private void reiniciarJuegoGanado() {  //Metodo que reinicia el juego con los parametros iniciales pero tambien reinicia la jefe
+	private void reiniciarJuegoGanado() { //método para cuando ganás el juego, para permitir volver a jugar, pero reiniciando también al jefe final.
 		  Gondolf = new Gondolf(300, 300, 50, 50, 100, 100);
 		    enemigos = new Enemigo[10];
 		    enemigosVivos = 0;
@@ -225,10 +227,10 @@ public class Juego extends InterfaceJuego
 		}  
 		entorno.dibujarImagen(fondo, entorno.ancho() / 2, entorno.alto() / 2, 0); // Dibujo el fondo
 		
-		if (enemigosVivos < 10 && totalCreados < 50) {
+		if (enemigosVivos < 10 && totalCreados < 50) { //Si se cumple esa condicion, entra al for, busca un espacio vacío en el arreglo enemigos[] y genera un nuevo murciélago.
 			    for (int i = 0; i < enemigos.length; i++) {
 			        if (enemigos[i] == null) {
-			            enemigos[i] = Enemigo.generarMurcielagoAleatorio();
+			            enemigos[i] = Enemigo.generarMurcielagoAleatorio(); //Genera un nuevo murciélago aleatorio.
 			            enemigosVivos++;
 			            totalCreados++;
 			            break; // salimos del for después de generar uno
@@ -236,7 +238,7 @@ public class Juego extends InterfaceJuego
 			    }
 		}
 		 // Mover, dibujar y colisionar murciélagos
-        for (int i = 0; i < enemigos.length; i++) {
+        for (int i = 0; i < enemigos.length; i++) { //Hace que todos los enemigos (no nulos) se muevan en dirección a Gondolf.
         	  Enemigo e = enemigos[i];
               if (e != null) {
                   e.moverHacia(Gondolf.getX(), Gondolf.getY());
@@ -244,23 +246,23 @@ public class Juego extends InterfaceJuego
                // Verificar si el hechizo de agua está activo y el jugador hizo click izquierdo
                   if (hechizoAguaActivo && entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) { // se selecciona el boton
                       if (circuloAgua != null && circuloAgua.colisionaCon(e)) { // Verificar si el hechizo de agua existe y colisiona con el enemigo actual 'e'
-                    	  int ex = enemigos[i].getX(); // Guarda la posición X del enemigo
-                          int ey = enemigos[i].getY(); // Guarda la posición Y del enemigo
+                    	  int ex = enemigos[i].getX(); // Guarda la posición X del enemigo muerto
+                          int ey = enemigos[i].getY(); 
                     	  enemigos[i] = null; //si el hechizo colisiona con el murcielago, este muere
-                          EnemigosEliminados++; // Aumenta el contador de enemigos eliminados
-                          enemigosVivos--; // Disminuye el contador de enemigos vivos
+                          EnemigosEliminados++; 
+                          enemigosVivos--; 
                           
-                          if (Gondolf.getVida() <= 30) {
-                        	  for (int j = 0; j < pociones.length; j++) {
-                                  if (pociones[j] == null) {
-                                      pociones[j] = new Pocion(ex, ey);
+                          //Coloca una nueva poción en la primera posición libre del arreglo, en la ubicación donde murió el enemigo.
+                          if (Gondolf.getVida() <= 30) { //Si el jugador tiene poca vida...
+                        	  for (int j = 0; j < pociones.length; j++) { //Recorre el arreglo de pociones, buscando un espacio vacío.
+                                  if (pociones[j] == null) { //Cuando encuentra un lugar vacío (sin poción), entra al bloque if.
+                                      pociones[j] = new Pocion(ex, ey); //Crea una poción en la posición donde murió el enemigo.
                                       break;
                           }
-                      }
-                     
+                      } 
                   }
-                      }     
-                      }           
+              }     
+          }           
                   
                   if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) { // se selecciona el boton
                 	  if (hechizoFuegoActivo && circuloFuego != null && circuloFuego.colisionaCon(e)) {
@@ -278,21 +280,23 @@ public class Juego extends InterfaceJuego
                   }
                   
                   if (e.colisionaCon(Gondolf.getX(), Gondolf.getY(), 20)) {
-                      enemigos[i] = null;
+                      enemigos[i] = null; //Si el enemigo choca con el jugador, muere.
                       enemigosVivos--;
                       EnemigosEliminados++;
-                      Gondolf.restarvida(10);
+                      Gondolf.restarvida(10); //El jugador pierde 10 de vida.
                       
                       if (Gondolf.getVida() <= 0) {
-                          juegoTerminado = true;
+                          juegoTerminado = true; //Si la vida baja a 0, el juego termina.
                           return;
                       }
                    	}
                  }
               }
+        
+        //Cuando ya no quedan enemigos y se crearon 50, aparece el jefe.
         if (totalCreados == 50 && enemigosVivos == 0 && !jefeGenerado) {
 			jefeGenerado = true;
-			// Genera al jefe
+			
 		}
         if (hechizoAguaActivo && entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
         	if (circuloAgua !=null && circuloAgua.colisionaCon(jefe)) {
@@ -327,14 +331,11 @@ public class Juego extends InterfaceJuego
             botonRociador.setSeleccionado(false); // una vez que se lanza se deselecciona el boton
         }
 
-        			for (int i = 0; i < pociones.length; i++) {
-        				if (pociones[i] != null) {
-        					// Dibujar la poción
-        					pociones[i].dibujar(entorno);
-
-        					// Si ya pasaron 6 segundos, eliminarla
-        					if (pociones[i].expirada()) {
-        						pociones[i] = null;
+        	for (int i = 0; i < pociones.length; i++) { //Recorre todas las pociones del arreglo pociones[].
+        		if (pociones[i] != null) {
+        			pociones[i].dibujar(entorno); // Dibujar la poción
+        			if (pociones[i].expirada()) {
+        				pociones[i] = null; // Si ya pasaron 6 segundos, eliminarla
                 }
             }
         }
@@ -460,9 +461,19 @@ public class Juego extends InterfaceJuego
 				piedras[i].dibujar(entorno);
 			}
 		}
+		
         for (Enemigo e : enemigos) {
-            if (e != null) e.dibujar(entorno);
-		  }
+            if (e != null) e.dibujar(entorno); //los enemigos activos se dibujan en pantalla. Si un enemigo es null, se lo ignora y no se dibuja.
+		  }   
+        
+        //Esto sirve para que todas las pociones visibles (que están activas en el juego) se dibujen en pantalla.
+        //Si alguna posición del arreglo está vacía, simplemente la salta para evitar errores.
+        for (int i=0; i< pociones.length; i++) {
+        	if (pociones[i]!= null) {
+        		pociones[i].dibujar(entorno);
+        	}
+         }
+
         if (jefeGenerado && jefe != null) {
         	jefe.dibujar(entorno);
         	jefe.mover(entorno);
@@ -493,15 +504,10 @@ public class Juego extends InterfaceJuego
                              disparo[j] = null;
                          }        
                          
-       }
+          }
+        }
       }
-   }
-        for (int i=0; i< pociones.length; i++) {
-        	if (pociones[i]!= null) {
-        		pociones[i].dibujar(entorno);
-        	}
-         }
-  }
+	}  
 	
 
 	
